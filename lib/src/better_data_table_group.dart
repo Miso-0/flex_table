@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-/// Defines a named section of rows in a [FlexibleDataTable].
+/// Defines a named section of rows in a [BetterDataTable].
 ///
 /// Groups add a spanning header above a contiguous range of rows. When
 /// [collapsible] is `true`, users can tap the header to show or hide the rows.
-class FlexibleDataTableGroup {
-  const FlexibleDataTableGroup({
+class BetterDataTableGroup {
+  const BetterDataTableGroup({
     required this.header,
     required this.startIndex,
     required this.endIndex,
@@ -24,21 +24,21 @@ class FlexibleDataTableGroup {
 
   /// When `true`, a toggle icon is shown in the group header and users can
   /// collapse the group to hide its rows. Collapsed state is tracked via
-  /// [FlexibleDataTable.collapsedGroups] and [FlexibleDataTable.onGroupToggled].
+  /// [BetterDataTable.collapsedGroups] and [BetterDataTable.onGroupToggled].
   final bool collapsible;
 
   /// Optional key, useful for list animations.
   final Key? key;
 
   /// Creates a copy of this group with the given fields replaced.
-  FlexibleDataTableGroup copyWith({
+  BetterDataTableGroup copyWith({
     Widget? header,
     int? startIndex,
     int? endIndex,
     bool? collapsible,
     Key? key,
   }) {
-    return FlexibleDataTableGroup(
+    return BetterDataTableGroup(
       header: header ?? this.header,
       startIndex: startIndex ?? this.startIndex,
       endIndex: endIndex ?? this.endIndex,

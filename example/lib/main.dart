@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flexible_data_table/flexible_data_table.dart';
+import 'package:better_data_table/better_data_table.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'FlexibleDataTable Examples',
+      title: 'BetterDataTable Examples',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
@@ -28,7 +28,7 @@ class ExamplesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('FlexibleDataTable Examples'),
+        title: const Text('BetterDataTable Examples'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: ListView(
@@ -73,37 +73,37 @@ class BasicTableExample extends StatelessWidget {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: FlexibleDataTable(
+        child: BetterDataTable(
           columns: [
-            FlexibleDataTableColumn(
+            BetterDataTableColumn(
               header: const Text('Name'),
               width: const FlexColumnWidth(2),
             ),
-            FlexibleDataTableColumn(
+            BetterDataTableColumn(
               header: const Text('Age'),
               width: const FixedColumnWidth(80),
             ),
-            FlexibleDataTableColumn(
+            BetterDataTableColumn(
               header: const Text('City'),
               width: const FlexColumnWidth(1),
             ),
           ],
           rows: [
-            FlexibleDataTableRow(
+            BetterDataTableRow(
               cells: [
                 const Text('Alice Johnson'),
                 const Text('28'),
                 const Text('New York'),
               ],
             ),
-            FlexibleDataTableRow(
+            BetterDataTableRow(
               cells: [
                 const Text('Bob Smith'),
                 const Text('34'),
                 const Text('Los Angeles'),
               ],
             ),
-            FlexibleDataTableRow(
+            BetterDataTableRow(
               cells: [
                 const Text('Carol White'),
                 const Text('25'),
@@ -174,23 +174,23 @@ class _SortableTableExampleState extends State<SortableTableExample> {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: FlexibleDataTable(
-          theme: FlexibleDataTableTheme.defaultTheme(context),
+        child: BetterDataTable(
+          theme: BetterDataTableTheme.defaultTheme(context),
           sortColumnIndex: sortColumnIndex,
           sortAscending: sortAscending,
           onSort: _sort,
           columns: [
-            FlexibleDataTableColumn(
+            BetterDataTableColumn(
               header: const Text('Name'),
               sortable: true,
               width: const FlexColumnWidth(2),
             ),
-            FlexibleDataTableColumn(
+            BetterDataTableColumn(
               header: const Text('Age'),
               sortable: true,
               width: const FixedColumnWidth(80),
             ),
-            FlexibleDataTableColumn(
+            BetterDataTableColumn(
               header: const Text('City'),
               sortable: true,
               width: const FlexColumnWidth(1),
@@ -198,7 +198,7 @@ class _SortableTableExampleState extends State<SortableTableExample> {
           ],
           rows: people
               .map(
-                (person) => FlexibleDataTableRow(
+                (person) => BetterDataTableRow(
                   cells: [
                     Text(person.name),
                     Text('${person.age}'),
@@ -239,7 +239,7 @@ class _SelectableTableExampleState extends State<SelectableTableExample> {
                 style: Theme.of(context).textTheme.titleSmall,
               ),
             ),
-            FlexibleDataTable(
+            BetterDataTable(
               showCheckboxes: true,
               selectedRows: selectedRows,
               onRowSelected: (index) {
@@ -261,12 +261,12 @@ class _SelectableTableExampleState extends State<SelectableTableExample> {
                 });
               },
               columns: [
-                FlexibleDataTableColumn(header: const Text('Item')),
-                FlexibleDataTableColumn(header: const Text('Status')),
+                BetterDataTableColumn(header: const Text('Item')),
+                BetterDataTableColumn(header: const Text('Status')),
               ],
               rows: List.generate(
                 5,
-                (i) => FlexibleDataTableRow(
+                (i) => BetterDataTableRow(
                   cells: [Text('Item ${i + 1}'), Text('Active')],
                 ),
               ),
@@ -302,7 +302,7 @@ class _ExpandableTableExampleState extends State<ExpandableTableExample> {
               style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
             ),
             const SizedBox(height: 8),
-            FlexibleDataTable(
+            BetterDataTable(
               expandedRows: expandedRows,
               onRowExpanded: (path) {
                 setState(() {
@@ -314,22 +314,22 @@ class _ExpandableTableExampleState extends State<ExpandableTableExample> {
                 });
               },
               columns: [
-                FlexibleDataTableColumn(
+                BetterDataTableColumn(
                   header: const Text('Task'),
                   width: const FlexColumnWidth(3),
                 ),
-                FlexibleDataTableColumn(
+                BetterDataTableColumn(
                   header: const Text('Status'),
                   width: const FlexColumnWidth(1),
                 ),
-                FlexibleDataTableColumn(
+                BetterDataTableColumn(
                   header: const Text('Priority'),
                   width: const FixedColumnWidth(100),
                 ),
               ],
               rows: [
                 // Project 1 with nested tasks
-                FlexibleDataTableRow(
+                BetterDataTableRow(
                   cells: [
                     const Text('Project Alpha'),
                     const Text('In Progress'),
@@ -337,35 +337,35 @@ class _ExpandableTableExampleState extends State<ExpandableTableExample> {
                   ],
                   children: [
                     // Phase 1
-                    FlexibleDataTableRow(
+                    BetterDataTableRow(
                       cells: [
                         const Text('Phase 1: Planning'),
                         const Text('Completed'),
                         const Text('High'),
                       ],
                       children: [
-                        FlexibleDataTableRow(
+                        BetterDataTableRow(
                           cells: [
                             const Text('Research market needs'),
                             const Text('Done'),
                             const Text('Medium'),
                           ],
                         ),
-                        FlexibleDataTableRow(
+                        BetterDataTableRow(
                           cells: [
                             const Text('Define requirements'),
                             const Text('Done'),
                             const Text('High'),
                           ],
                           children: [
-                            FlexibleDataTableRow(
+                            BetterDataTableRow(
                               cells: [
                                 const Text('Gather stakeholder input'),
                                 const Text('Done'),
                                 const Text('Medium'),
                               ],
                             ),
-                            FlexibleDataTableRow(
+                            BetterDataTableRow(
                               cells: [
                                 const Text('Write specifications'),
                                 const Text('Done'),
@@ -377,21 +377,21 @@ class _ExpandableTableExampleState extends State<ExpandableTableExample> {
                       ],
                     ),
                     // Phase 2
-                    FlexibleDataTableRow(
+                    BetterDataTableRow(
                       cells: [
                         const Text('Phase 2: Development'),
                         const Text('In Progress'),
                         const Text('High'),
                       ],
                       children: [
-                        FlexibleDataTableRow(
+                        BetterDataTableRow(
                           cells: [
                             const Text('Backend API'),
                             const Text('In Progress'),
                             const Text('High'),
                           ],
                         ),
-                        FlexibleDataTableRow(
+                        BetterDataTableRow(
                           cells: [
                             const Text('Frontend UI'),
                             const Text('Not Started'),
@@ -403,14 +403,14 @@ class _ExpandableTableExampleState extends State<ExpandableTableExample> {
                   ],
                 ),
                 // Project 2
-                FlexibleDataTableRow(
+                BetterDataTableRow(
                   cells: [
                     const Text('Project Beta'),
                     const Text('Planning'),
                     const Text('Medium'),
                   ],
                   children: [
-                    FlexibleDataTableRow(
+                    BetterDataTableRow(
                       cells: [
                         const Text('Initial research'),
                         const Text('In Progress'),
@@ -420,7 +420,7 @@ class _ExpandableTableExampleState extends State<ExpandableTableExample> {
                   ],
                 ),
                 // Simple task without children
-                FlexibleDataTableRow(
+                BetterDataTableRow(
                   cells: [
                     const Text('Standalone Task'),
                     const Text('Completed'),
@@ -445,39 +445,39 @@ class FooterTableExample extends StatelessWidget {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: FlexibleDataTable(
+        child: BetterDataTable(
           columns: [
-            FlexibleDataTableColumn(
+            BetterDataTableColumn(
               header: const Text('Item'),
               width: const FlexColumnWidth(2),
             ),
-            FlexibleDataTableColumn(
+            BetterDataTableColumn(
               header: const Text('Quantity'),
               width: const FixedColumnWidth(100),
               cellAlignment: Alignment.centerRight,
             ),
-            FlexibleDataTableColumn(
+            BetterDataTableColumn(
               header: const Text('Price'),
               width: const FixedColumnWidth(100),
               cellAlignment: Alignment.centerRight,
             ),
           ],
           rows: [
-            FlexibleDataTableRow(
+            BetterDataTableRow(
               cells: [
                 const Text('Apple'),
                 const Text('5', textAlign: TextAlign.right),
                 const Text('\$10.00', textAlign: TextAlign.right),
               ],
             ),
-            FlexibleDataTableRow(
+            BetterDataTableRow(
               cells: [
                 const Text('Banana'),
                 const Text('3', textAlign: TextAlign.right),
                 const Text('\$6.00', textAlign: TextAlign.right),
               ],
             ),
-            FlexibleDataTableRow(
+            BetterDataTableRow(
               cells: [
                 const Text('Orange'),
                 const Text('2', textAlign: TextAlign.right),
@@ -486,7 +486,7 @@ class FooterTableExample extends StatelessWidget {
             ),
           ],
           footerRows: [
-            FlexibleDataTableRow(
+            BetterDataTableRow(
               cells: [
                 const Text('Total'),
                 const Text('10', textAlign: TextAlign.right),

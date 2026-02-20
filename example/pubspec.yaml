@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flexible_data_table:
+  better_data_table:
     path: ../
 
 dev_dependencies:

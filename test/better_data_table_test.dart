@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flexible_data_table/flexible_data_table.dart';
+import 'package:better_data_table/better_data_table.dart';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -16,25 +16,25 @@ Widget _wrap(Widget child) {
   );
 }
 
-/// Returns a minimal two-column [FlexibleDataTable].
-FlexibleDataTable _basicTable({List<FlexibleDataTableRow> rows = const []}) {
-  return FlexibleDataTable(
+/// Returns a minimal two-column [BetterDataTable].
+BetterDataTable _basicTable({List<BetterDataTableRow> rows = const []}) {
+  return BetterDataTable(
     columns: const [
-      FlexibleDataTableColumn(header: Text('Name')),
-      FlexibleDataTableColumn(header: Text('Age')),
+      BetterDataTableColumn(header: Text('Name')),
+      BetterDataTableColumn(header: Text('Age')),
     ],
     rows: rows,
   );
 }
 
 // =============================================================================
-// FlexibleDataTableColumn
+// BetterDataTableColumn
 // =============================================================================
 
 void main() {
-  group('FlexibleDataTableColumn', () {
+  group('BetterDataTableColumn', () {
     test('defaults', () {
-      const col = FlexibleDataTableColumn(header: Text('X'));
+      const col = BetterDataTableColumn(header: Text('X'));
       expect(col.visible, isTrue);
       expect(col.sortable, isFalse);
       expect(col.tooltip, isNull);
@@ -44,7 +44,7 @@ void main() {
     });
 
     test('copyWith changes requested fields', () {
-      const original = FlexibleDataTableColumn(
+      const original = BetterDataTableColumn(
         header: Text('Original'),
         sortable: false,
         visible: true,
@@ -56,7 +56,7 @@ void main() {
     });
 
     test('copyWith preserves unchanged fields', () {
-      const original = FlexibleDataTableColumn(
+      const original = BetterDataTableColumn(
         header: Text('Keep'),
         minWidth: 60,
         maxWidth: 200,
@@ -71,24 +71,24 @@ void main() {
   });
 
   // ==========================================================================
-  // FlexibleDataTableRow
+  // BetterDataTableRow
   // ==========================================================================
 
-  group('FlexibleDataTableRow', () {
+  group('BetterDataTableRow', () {
     test('stores cells', () {
-      const row = FlexibleDataTableRow(cells: [Text('a'), Text('b')]);
+      const row = BetterDataTableRow(cells: [Text('a'), Text('b')]);
       expect(row.cells.length, 2);
     });
 
     test('copyWith changes cells', () {
-      const original = FlexibleDataTableRow(cells: [Text('old')]);
+      const original = BetterDataTableRow(cells: [Text('old')]);
       final copy = original.copyWith(cells: [const Text('new')]);
       expect((copy.cells.first as Text).data, 'new');
     });
 
     test('copyWith preserves decoration and tooltip', () {
       final decoration = BoxDecoration(color: Colors.red);
-      const original = FlexibleDataTableRow(cells: [], tooltip: 'tip');
+      const original = BetterDataTableRow(cells: [], tooltip: 'tip');
       final copy = original.copyWith(decoration: decoration);
       expect(copy.tooltip, 'tip');
       expect(copy.decoration, decoration);
@@ -96,12 +96,12 @@ void main() {
   });
 
   // ==========================================================================
-  // FlexibleDataTableGroup
+  // BetterDataTableGroup
   // ==========================================================================
 
-  group('FlexibleDataTableGroup', () {
+  group('BetterDataTableGroup', () {
     test('defaults', () {
-      const g = FlexibleDataTableGroup(
+      const g = BetterDataTableGroup(
         header: Text('G'),
         startIndex: 0,
         endIndex: 2,
@@ -110,7 +110,7 @@ void main() {
     });
 
     test('copyWith changes collapsible', () {
-      const g = FlexibleDataTableGroup(
+      const g = BetterDataTableGroup(
         header: Text('G'),
         startIndex: 0,
         endIndex: 1,
@@ -121,7 +121,7 @@ void main() {
     });
 
     test('copyWith preserves unchanged fields', () {
-      const g = FlexibleDataTableGroup(
+      const g = BetterDataTableGroup(
         header: Text('Section'),
         startIndex: 2,
         endIndex: 4,
@@ -134,19 +134,19 @@ void main() {
   });
 
   // ==========================================================================
-  // FlexibleDataTableTheme
+  // BetterDataTableTheme
   // ==========================================================================
 
-  group('FlexibleDataTableTheme', () {
+  group('BetterDataTableTheme', () {
     test('minimal disables hover and has no decorations', () {
-      final t = FlexibleDataTableTheme.minimal();
+      final t = BetterDataTableTheme.minimal();
       expect(t.enableHoverEffect, isFalse);
       expect(t.headerDecoration, isNull);
       expect(t.rowDecoration, isNull);
     });
 
     test('copyWith changes requested fields', () {
-      final t = FlexibleDataTableTheme.minimal().copyWith(
+      final t = BetterDataTableTheme.minimal().copyWith(
         enableHoverEffect: true,
         cellPadding: const EdgeInsets.all(4),
       );
@@ -155,7 +155,7 @@ void main() {
     });
 
     test('copyWith preserves unchanged fields', () {
-      const original = FlexibleDataTableTheme(
+      const original = BetterDataTableTheme(
         headerCellPadding: EdgeInsets.all(8),
         enableHoverEffect: false,
       );
@@ -165,12 +165,12 @@ void main() {
     });
 
     testWidgets('defaultTheme has row and header decorations', (tester) async {
-      late FlexibleDataTableTheme theme;
+      late BetterDataTableTheme theme;
       await tester.pumpWidget(
         _wrap(
           Builder(
             builder: (context) {
-              theme = FlexibleDataTableTheme.defaultTheme(context);
+              theme = BetterDataTableTheme.defaultTheme(context);
               return const SizedBox.shrink();
             },
           ),
@@ -182,12 +182,12 @@ void main() {
     });
 
     testWidgets('striped theme sets alternateRowDecoration', (tester) async {
-      late FlexibleDataTableTheme theme;
+      late BetterDataTableTheme theme;
       await tester.pumpWidget(
         _wrap(
           Builder(
             builder: (context) {
-              theme = FlexibleDataTableTheme.striped(context);
+              theme = BetterDataTableTheme.striped(context);
               return const SizedBox.shrink();
             },
           ),
@@ -198,17 +198,17 @@ void main() {
   });
 
   // ==========================================================================
-  // FlexibleDataTable – loading & empty states
+  // BetterDataTable – loading & empty states
   // ==========================================================================
 
-  group('FlexibleDataTable – loading & empty states', () {
+  group('BetterDataTable – loading & empty states', () {
     testWidgets('shows CircularProgressIndicator when isLoading', (
       tester,
     ) async {
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
-            columns: const [FlexibleDataTableColumn(header: Text('A'))],
+          BetterDataTable(
+            columns: const [BetterDataTableColumn(header: Text('A'))],
             isLoading: true,
           ),
         ),
@@ -226,8 +226,8 @@ void main() {
     testWidgets('custom loading builder is used', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
-            columns: const [FlexibleDataTableColumn(header: Text('A'))],
+          BetterDataTable(
+            columns: const [BetterDataTableColumn(header: Text('A'))],
             isLoading: true,
             loadingBuilder: (_) => const Text('custom loading'),
           ),
@@ -239,8 +239,8 @@ void main() {
     testWidgets('custom empty builder is used', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
-            columns: const [FlexibleDataTableColumn(header: Text('A'))],
+          BetterDataTable(
+            columns: const [BetterDataTableColumn(header: Text('A'))],
             emptyBuilder: (_) => const Text('nothing here'),
           ),
         ),
@@ -250,16 +250,16 @@ void main() {
   });
 
   // ==========================================================================
-  // FlexibleDataTable – rendering
+  // BetterDataTable – rendering
   // ==========================================================================
 
-  group('FlexibleDataTable – rendering', () {
+  group('BetterDataTable – rendering', () {
     testWidgets('renders header text', (tester) async {
       await tester.pumpWidget(
         _wrap(
           _basicTable(
             rows: [
-              const FlexibleDataTableRow(cells: [Text('Alice'), Text('28')]),
+              const BetterDataTableRow(cells: [Text('Alice'), Text('28')]),
             ],
           ),
         ),
@@ -273,7 +273,7 @@ void main() {
         _wrap(
           _basicTable(
             rows: [
-              const FlexibleDataTableRow(cells: [Text('Bob'), Text('42')]),
+              const BetterDataTableRow(cells: [Text('Bob'), Text('42')]),
             ],
           ),
         ),
@@ -287,9 +287,9 @@ void main() {
         _wrap(
           _basicTable(
             rows: [
-              const FlexibleDataTableRow(cells: [Text('Alice'), Text('28')]),
-              const FlexibleDataTableRow(cells: [Text('Bob'), Text('34')]),
-              const FlexibleDataTableRow(cells: [Text('Carol'), Text('25')]),
+              const BetterDataTableRow(cells: [Text('Alice'), Text('28')]),
+              const BetterDataTableRow(cells: [Text('Bob'), Text('34')]),
+              const BetterDataTableRow(cells: [Text('Carol'), Text('25')]),
             ],
           ),
         ),
@@ -302,13 +302,13 @@ void main() {
     testWidgets('hidden column header is not rendered', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
+          BetterDataTable(
             columns: const [
-              FlexibleDataTableColumn(header: Text('Visible')),
-              FlexibleDataTableColumn(header: Text('Hidden'), visible: false),
+              BetterDataTableColumn(header: Text('Visible')),
+              BetterDataTableColumn(header: Text('Hidden'), visible: false),
             ],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('v'), Text('h')]),
+              BetterDataTableRow(cells: [Text('v'), Text('h')]),
             ],
           ),
         ),
@@ -320,13 +320,13 @@ void main() {
     testWidgets('hidden column cell data is not rendered', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
+          BetterDataTable(
             columns: const [
-              FlexibleDataTableColumn(header: Text('A')),
-              FlexibleDataTableColumn(header: Text('B'), visible: false),
+              BetterDataTableColumn(header: Text('A')),
+              BetterDataTableColumn(header: Text('B'), visible: false),
             ],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('shown'), Text('hidden-cell')]),
+              BetterDataTableRow(cells: [Text('shown'), Text('hidden-cell')]),
             ],
           ),
         ),
@@ -338,16 +338,16 @@ void main() {
     testWidgets('footer rows are rendered', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
+          BetterDataTable(
             columns: const [
-              FlexibleDataTableColumn(header: Text('Item')),
-              FlexibleDataTableColumn(header: Text('Total')),
+              BetterDataTableColumn(header: Text('Item')),
+              BetterDataTableColumn(header: Text('Total')),
             ],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('Widget'), Text('5')]),
+              BetterDataTableRow(cells: [Text('Widget'), Text('5')]),
             ],
             footerRows: const [
-              FlexibleDataTableRow(cells: [Text('Sum'), Text('5')]),
+              BetterDataTableRow(cells: [Text('Sum'), Text('5')]),
             ],
           ),
         ),
@@ -358,14 +358,14 @@ void main() {
     testWidgets('group header text is rendered', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
-            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
+          BetterDataTable(
+            columns: const [BetterDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('Alice')]),
-              FlexibleDataTableRow(cells: [Text('Bob')]),
+              BetterDataTableRow(cells: [Text('Alice')]),
+              BetterDataTableRow(cells: [Text('Bob')]),
             ],
             groups: const [
-              FlexibleDataTableGroup(
+              BetterDataTableGroup(
                 header: Text('Group A'),
                 startIndex: 0,
                 endIndex: 1,
@@ -383,10 +383,10 @@ void main() {
     ) async {
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
-            columns: const [FlexibleDataTableColumn(header: Text('Original'))],
+          BetterDataTable(
+            columns: const [BetterDataTableColumn(header: Text('Original'))],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('x')]),
+              BetterDataTableRow(cells: [Text('x')]),
             ],
             headerBuilder: (_, _, _) => const Text('Custom Header'),
           ),
@@ -398,20 +398,20 @@ void main() {
   });
 
   // ==========================================================================
-  // FlexibleDataTable – sorting
+  // BetterDataTable – sorting
   // ==========================================================================
 
-  group('FlexibleDataTable – sorting', () {
+  group('BetterDataTable – sorting', () {
     testWidgets('arrow_upward shown for ascending sort', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
+          BetterDataTable(
             columns: const [
-              FlexibleDataTableColumn(header: Text('Name'), sortable: true),
-              FlexibleDataTableColumn(header: Text('Age'), sortable: true),
+              BetterDataTableColumn(header: Text('Name'), sortable: true),
+              BetterDataTableColumn(header: Text('Age'), sortable: true),
             ],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('Alice'), Text('28')]),
+              BetterDataTableRow(cells: [Text('Alice'), Text('28')]),
             ],
             sortColumnIndex: 0,
             sortAscending: true,
@@ -425,12 +425,12 @@ void main() {
     testWidgets('arrow_downward shown for descending sort', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
+          BetterDataTable(
             columns: const [
-              FlexibleDataTableColumn(header: Text('Name'), sortable: true),
+              BetterDataTableColumn(header: Text('Name'), sortable: true),
             ],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('Alice')]),
+              BetterDataTableRow(cells: [Text('Alice')]),
             ],
             sortColumnIndex: 0,
             sortAscending: false,
@@ -445,12 +445,12 @@ void main() {
       int? sortedIndex;
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
+          BetterDataTable(
             columns: const [
-              FlexibleDataTableColumn(header: Text('Name'), sortable: true),
+              BetterDataTableColumn(header: Text('Name'), sortable: true),
             ],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('Alice')]),
+              BetterDataTableRow(cells: [Text('Alice')]),
             ],
             onSort: (i) => sortedIndex = i,
           ),
@@ -467,13 +467,13 @@ void main() {
     ) async {
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
+          BetterDataTable(
             columns: const [
-              FlexibleDataTableColumn(header: Text('Name'), sortable: true),
-              FlexibleDataTableColumn(header: Text('Age'), sortable: true),
+              BetterDataTableColumn(header: Text('Name'), sortable: true),
+              BetterDataTableColumn(header: Text('Age'), sortable: true),
             ],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('Alice'), Text('28')]),
+              BetterDataTableRow(cells: [Text('Alice'), Text('28')]),
             ],
             sortColumnIndex: 1,
             onSort: (_) {},
@@ -486,18 +486,18 @@ void main() {
   });
 
   // ==========================================================================
-  // FlexibleDataTable – selection
+  // BetterDataTable – selection
   // ==========================================================================
 
-  group('FlexibleDataTable – selection', () {
+  group('BetterDataTable – selection', () {
     testWidgets('checkboxes shown when showCheckboxes is true', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
+          BetterDataTable(
             showCheckboxes: true,
-            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
+            columns: const [BetterDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('Alice')]),
+              BetterDataTableRow(cells: [Text('Alice')]),
             ],
           ),
         ),
@@ -509,11 +509,11 @@ void main() {
       int? selected;
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
+          BetterDataTable(
             showCheckboxes: true,
-            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
+            columns: const [BetterDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('Alice')]),
+              BetterDataTableRow(cells: [Text('Alice')]),
             ],
             onRowSelected: (i) => selected = i,
           ),
@@ -532,12 +532,12 @@ void main() {
       bool? selectAllValue;
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
+          BetterDataTable(
             showCheckboxes: true,
-            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
+            columns: const [BetterDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('Alice')]),
-              FlexibleDataTableRow(cells: [Text('Bob')]),
+              BetterDataTableRow(cells: [Text('Alice')]),
+              BetterDataTableRow(cells: [Text('Bob')]),
             ],
             onSelectAll: (v) => selectAllValue = v,
           ),
@@ -552,12 +552,12 @@ void main() {
     testWidgets('pre-selected row checkbox shows checked', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
+          BetterDataTable(
             showCheckboxes: true,
             selectedRows: const {0},
-            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
+            columns: const [BetterDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('Alice')]),
+              BetterDataTableRow(cells: [Text('Alice')]),
             ],
           ),
         ),
@@ -568,17 +568,17 @@ void main() {
   });
 
   // ==========================================================================
-  // FlexibleDataTable – expansion
+  // BetterDataTable – expansion
   // ==========================================================================
 
-  group('FlexibleDataTable – expansion', () {
+  group('BetterDataTable – expansion', () {
     testWidgets('expand_more icon shown for expandable rows', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
-            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
+          BetterDataTable(
+            columns: const [BetterDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('Alice')]),
+              BetterDataTableRow(cells: [Text('Alice')]),
             ],
             expandableRowBuilder: (_, _, _) => const Text('Details'),
           ),
@@ -590,10 +590,10 @@ void main() {
     testWidgets('tapping expand icon shows expanded content', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
-            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
+          BetterDataTable(
+            columns: const [BetterDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('Alice')]),
+              BetterDataTableRow(cells: [Text('Alice')]),
             ],
             expandableRowBuilder: (_, _, _) => const Text('Expanded content'),
           ),
@@ -609,10 +609,10 @@ void main() {
     testWidgets('tapping again collapses the expanded row', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
-            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
+          BetterDataTable(
+            columns: const [BetterDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('Alice')]),
+              BetterDataTableRow(cells: [Text('Alice')]),
             ],
             expandableRowBuilder: (_, _, _) => const Text('Details'),
           ),
@@ -632,10 +632,10 @@ void main() {
       String? expandedIndex;
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
-            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
+          BetterDataTable(
+            columns: const [BetterDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('Alice')]),
+              BetterDataTableRow(cells: [Text('Alice')]),
             ],
             expandableRowBuilder: (_, _, _) => const Text('details'),
             onRowExpanded: (i) => expandedIndex = i,
@@ -651,10 +651,10 @@ void main() {
     testWidgets('null-returning builder hides expand icon', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
-            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
+          BetterDataTable(
+            columns: const [BetterDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('Alice')]),
+              BetterDataTableRow(cells: [Text('Alice')]),
             ],
             expandableRowBuilder: (_, _, _) => null,
           ),
@@ -665,22 +665,22 @@ void main() {
   });
 
   // ==========================================================================
-  // FlexibleDataTable – groups
+  // BetterDataTable – groups
   // ==========================================================================
 
-  group('FlexibleDataTable – groups', () {
+  group('BetterDataTable – groups', () {
     testWidgets('collapsible group shows expand_more initially', (
       tester,
     ) async {
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
-            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
+          BetterDataTable(
+            columns: const [BetterDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('Alice')]),
+              BetterDataTableRow(cells: [Text('Alice')]),
             ],
             groups: const [
-              FlexibleDataTableGroup(
+              BetterDataTableGroup(
                 header: Text('Section'),
                 startIndex: 0,
                 endIndex: 0,
@@ -696,13 +696,13 @@ void main() {
     testWidgets('tapping collapsible group hides its rows', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
-            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
+          BetterDataTable(
+            columns: const [BetterDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('Alice')]),
+              BetterDataTableRow(cells: [Text('Alice')]),
             ],
             groups: const [
-              FlexibleDataTableGroup(
+              BetterDataTableGroup(
                 header: Text('Section'),
                 startIndex: 0,
                 endIndex: 0,
@@ -722,13 +722,13 @@ void main() {
     testWidgets('collapsed group can be expanded again', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
-            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
+          BetterDataTable(
+            columns: const [BetterDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('Alice')]),
+              BetterDataTableRow(cells: [Text('Alice')]),
             ],
             groups: const [
-              FlexibleDataTableGroup(
+              BetterDataTableGroup(
                 header: Text('Section'),
                 startIndex: 0,
                 endIndex: 0,
@@ -752,13 +752,13 @@ void main() {
       int? toggledGroup;
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
-            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
+          BetterDataTable(
+            columns: const [BetterDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('Alice')]),
+              BetterDataTableRow(cells: [Text('Alice')]),
             ],
             groups: const [
-              FlexibleDataTableGroup(
+              BetterDataTableGroup(
                 header: Text('Section'),
                 startIndex: 0,
                 endIndex: 0,
@@ -777,18 +777,18 @@ void main() {
   });
 
   // ==========================================================================
-  // FlexibleDataTable – row callbacks
+  // BetterDataTable – row callbacks
   // ==========================================================================
 
-  group('FlexibleDataTable – row callbacks', () {
+  group('BetterDataTable – row callbacks', () {
     testWidgets('onRowTap fires with row index', (tester) async {
       int? tappedRow;
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
-            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
+          BetterDataTable(
+            columns: const [BetterDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('Alice')]),
+              BetterDataTableRow(cells: [Text('Alice')]),
             ],
             onRowTap: (i) => tappedRow = i,
           ),
@@ -807,13 +807,13 @@ void main() {
       int? tapCol;
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
+          BetterDataTable(
             columns: const [
-              FlexibleDataTableColumn(header: Text('A')),
-              FlexibleDataTableColumn(header: Text('B')),
+              BetterDataTableColumn(header: Text('A')),
+              BetterDataTableColumn(header: Text('B')),
             ],
             rows: const [
-              FlexibleDataTableRow(cells: [Text('cell-a'), Text('cell-b')]),
+              BetterDataTableRow(cells: [Text('cell-a'), Text('cell-b')]),
             ],
             onCellTap: (r, c) {
               tapRow = r;
@@ -829,16 +829,16 @@ void main() {
       expect(tapCol, 1);
     });
 
-    testWidgets('FlexibleDataTableRow.onTap fires when row tapped', (
+    testWidgets('BetterDataTableRow.onTap fires when row tapped', (
       tester,
     ) async {
       bool tapped = false;
       await tester.pumpWidget(
         _wrap(
-          FlexibleDataTable(
-            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
+          BetterDataTable(
+            columns: const [BetterDataTableColumn(header: Text('Name'))],
             rows: [
-              FlexibleDataTableRow(
+              BetterDataTableRow(
                 cells: const [Text('Alice')],
                 onTap: () => tapped = true,
               ),

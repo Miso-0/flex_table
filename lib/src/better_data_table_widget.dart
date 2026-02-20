@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'flexible_data_table_column.dart';
-import 'flexible_data_table_group.dart';
-import 'flexible_data_table_row.dart';
-import 'flexible_data_table_theme.dart';
+import 'better_data_table_column.dart';
+import 'better_data_table_group.dart';
+import 'better_data_table_row.dart';
+import 'better_data_table_theme.dart';
 
 /// A highly customizable and flexible table widget for Flutter.
 ///
-/// `FlexibleDataTable` renders tabular data using Flutter's [Table] widget as its
+/// `BetterDataTable` renders tabular data using Flutter's [Table] widget as its
 /// layout engine. It supports:
 ///
 /// - Flexible, fixed, intrinsic, and fractional column widths
@@ -28,19 +28,19 @@ import 'flexible_data_table_theme.dart';
 /// ## Basic usage
 ///
 /// ```dart
-/// FlexibleDataTable(
+/// BetterDataTable(
 ///   columns: [
-///     FlexibleDataTableColumn(header: Text('Name'), width: FlexColumnWidth(2), sortable: true),
-///     FlexibleDataTableColumn(header: Text('Age'), width: FixedColumnWidth(80)),
+///     BetterDataTableColumn(header: Text('Name'), width: FlexColumnWidth(2), sortable: true),
+///     BetterDataTableColumn(header: Text('Age'), width: FixedColumnWidth(80)),
 ///   ],
 ///   rows: [
-///     FlexibleDataTableRow(cells: [Text('Alice'), Text('28')]),
-///     FlexibleDataTableRow(cells: [Text('Bob'), Text('34')]),
+///     BetterDataTableRow(cells: [Text('Alice'), Text('28')]),
+///     BetterDataTableRow(cells: [Text('Bob'), Text('34')]),
 ///   ],
 /// )
 /// ```
-class FlexibleDataTable extends StatefulWidget {
-  const FlexibleDataTable({
+class BetterDataTable extends StatefulWidget {
+  const BetterDataTable({
     super.key,
     required this.columns,
     this.rows = const [],
@@ -87,40 +87,40 @@ class FlexibleDataTable extends StatefulWidget {
 
   // ── Data ───────────────────────────────────────────────────────────────────
 
-  /// Column definitions. Columns with [FlexibleDataTableColumn.visible] set to `false`
+  /// Column definitions. Columns with [BetterDataTableColumn.visible] set to `false`
   /// are excluded from layout and rendering.
-  final List<FlexibleDataTableColumn> columns;
+  final List<BetterDataTableColumn> columns;
 
-  /// Data rows. Each row's [FlexibleDataTableRow.cells] list corresponds positionally
+  /// Data rows. Each row's [BetterDataTableRow.cells] list corresponds positionally
   /// to the *visible* columns.
-  final List<FlexibleDataTableRow> rows;
+  final List<BetterDataTableRow> rows;
 
-  /// Theme overrides. When `null`, [FlexibleDataTableTheme.defaultTheme] is used.
-  final FlexibleDataTableTheme? theme;
+  /// Theme overrides. When `null`, [BetterDataTableTheme.defaultTheme] is used.
+  final BetterDataTableTheme? theme;
 
   // ── Builders ───────────────────────────────────────────────────────────────
 
   /// Replaces the default header cell rendering for every column.
   ///
-  /// Receives the [BuildContext], the [FlexibleDataTableColumn] (original, including
+  /// Receives the [BuildContext], the [BetterDataTableColumn] (original, including
   /// hidden columns that are filtered before this is called), and its original
   /// index in [columns].
   final Widget Function(
     BuildContext context,
-    FlexibleDataTableColumn column,
+    BetterDataTableColumn column,
     int columnIndex,
   )?
   headerBuilder;
 
   /// Replaces the default data cell rendering for every cell.
   ///
-  /// Receives the original cell [Widget], its [FlexibleDataTableColumn], the
-  /// [FlexibleDataTableRow], the row index, and the original column index.
+  /// Receives the original cell [Widget], its [BetterDataTableColumn], the
+  /// [BetterDataTableRow], the row index, and the original column index.
   final Widget Function(
     BuildContext context,
     Widget cell,
-    FlexibleDataTableColumn column,
-    FlexibleDataTableRow row,
+    BetterDataTableColumn column,
+    BetterDataTableRow row,
     int rowIndex,
     int columnIndex,
   )?
@@ -131,7 +131,7 @@ class FlexibleDataTable extends StatefulWidget {
   /// `defaultRow` is the widget produced by the default rendering pipeline.
   final Widget Function(
     BuildContext context,
-    FlexibleDataTableRow row,
+    BetterDataTableRow row,
     int rowIndex,
     Widget defaultRow,
   )?
@@ -146,7 +146,7 @@ class FlexibleDataTable extends StatefulWidget {
   // ── Footer ─────────────────────────────────────────────────────────────────
 
   /// Optional footer rows rendered below data rows (e.g., totals).
-  final List<FlexibleDataTableRow>? footerRows;
+  final List<BetterDataTableRow>? footerRows;
 
   // ── Selection ──────────────────────────────────────────────────────────────
 
@@ -181,12 +181,12 @@ class FlexibleDataTable extends StatefulWidget {
   /// Returns the widget to display below the row when it is expanded, or
   /// `null` if the row is not expandable.
   ///
-  /// **Note:** If rows have [FlexibleDataTableRow.children], they will automatically
+  /// **Note:** If rows have [BetterDataTableRow.children], they will automatically
   /// be expandable regardless of this builder. This builder is for custom
   /// expandable content that isn't hierarchical sub-rows.
   final Widget? Function(
     BuildContext context,
-    FlexibleDataTableRow row,
+    BetterDataTableRow row,
     int rowIndex,
   )?
   expandableRowBuilder;
@@ -219,14 +219,14 @@ class FlexibleDataTable extends StatefulWidget {
 
   // ── Groups ─────────────────────────────────────────────────────────────────
 
-  /// Optional list of [FlexibleDataTableGroup] definitions. When provided, rows are
+  /// Optional list of [BetterDataTableGroup] definitions. When provided, rows are
   /// rendered in group sections with a spanning header row.
-  final List<FlexibleDataTableGroup>? groups;
+  final List<BetterDataTableGroup>? groups;
 
   /// Replaces the default group header cell rendering.
   final Widget Function(
     BuildContext context,
-    FlexibleDataTableGroup group,
+    BetterDataTableGroup group,
     int groupIndex,
   )?
   groupHeaderBuilder;
@@ -258,7 +258,7 @@ class FlexibleDataTable extends StatefulWidget {
 
   // ── Styling ─────────────────────────────────────────────────────────────────
 
-  /// Table border overriding [FlexibleDataTableTheme.border].
+  /// Table border overriding [BetterDataTableTheme.border].
   final TableBorder? border;
 
   /// When set, this [BorderSide] is drawn as the bottom edge of every data row,
@@ -266,12 +266,12 @@ class FlexibleDataTable extends StatefulWidget {
   final BorderSide? rowDivider;
 
   @override
-  State<FlexibleDataTable> createState() => _FlexibleDataTableState();
+  State<BetterDataTable> createState() => _BetterDataTableState();
 }
 
 // =============================================================================
 
-class _FlexibleDataTableState extends State<FlexibleDataTable> {
+class _BetterDataTableState extends State<BetterDataTable> {
   late Set<int> _selectedRows;
   late Set<String> _expandedRows;
   late Set<int> _collapsedGroups;
@@ -286,7 +286,7 @@ class _FlexibleDataTableState extends State<FlexibleDataTable> {
   }
 
   @override
-  void didUpdateWidget(FlexibleDataTable oldWidget) {
+  void didUpdateWidget(BetterDataTable oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.selectedRows != oldWidget.selectedRows) {
       _selectedRows = Set.from(widget.selectedRows);
@@ -302,8 +302,8 @@ class _FlexibleDataTableState extends State<FlexibleDataTable> {
   // ── Helpers ────────────────────────────────────────────────────────────────
 
   /// Returns (originalIndex, column) pairs for all visible columns.
-  List<(int, FlexibleDataTableColumn)> get _visibleColumns {
-    final result = <(int, FlexibleDataTableColumn)>[];
+  List<(int, BetterDataTableColumn)> get _visibleColumns {
+    final result = <(int, BetterDataTableColumn)>[];
     for (var i = 0; i < widget.columns.length; i++) {
       if (widget.columns[i].visible) result.add((i, widget.columns[i]));
     }
@@ -318,7 +318,7 @@ class _FlexibleDataTableState extends State<FlexibleDataTable> {
         (hasExpandColumn ? 1 : 0);
   }
 
-  bool _anyRowHasChildren(List<FlexibleDataTableRow> rows) {
+  bool _anyRowHasChildren(List<BetterDataTableRow> rows) {
     for (final row in rows) {
       if (row.children != null && row.children!.isNotEmpty) {
         return true;
@@ -331,7 +331,7 @@ class _FlexibleDataTableState extends State<FlexibleDataTable> {
   }
 
   BoxDecoration? _rowDecoration(
-    FlexibleDataTableTheme theme,
+    BetterDataTableTheme theme,
     int rowIndex, {
     required bool isSelected,
     required bool isHovered,
@@ -369,7 +369,7 @@ class _FlexibleDataTableState extends State<FlexibleDataTable> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = widget.theme ?? FlexibleDataTableTheme.defaultTheme(context);
+    final theme = widget.theme ?? BetterDataTableTheme.defaultTheme(context);
 
     if (widget.isLoading) {
       return widget.loadingBuilder?.call(context) ?? _buildDefaultLoading();
@@ -386,7 +386,7 @@ class _FlexibleDataTableState extends State<FlexibleDataTable> {
     );
   }
 
-  Widget _buildTable(BuildContext context, FlexibleDataTableTheme theme) {
+  Widget _buildTable(BuildContext context, BetterDataTableTheme theme) {
     return Table(
       border: widget.border ?? theme.border,
       columnWidths: _buildColumnWidths(),
@@ -437,7 +437,7 @@ class _FlexibleDataTableState extends State<FlexibleDataTable> {
 
   // ── Header ─────────────────────────────────────────────────────────────────
 
-  TableRow _buildHeaderRow(BuildContext context, FlexibleDataTableTheme theme) {
+  TableRow _buildHeaderRow(BuildContext context, BetterDataTableTheme theme) {
     final cells = <Widget>[];
 
     if (widget.showCheckboxes) {
@@ -459,7 +459,7 @@ class _FlexibleDataTableState extends State<FlexibleDataTable> {
 
   Widget _buildSelectAllCheckbox(
     BuildContext context,
-    FlexibleDataTableTheme theme,
+    BetterDataTableTheme theme,
   ) {
     final allSelected =
         widget.rows.isNotEmpty &&
@@ -497,9 +497,9 @@ class _FlexibleDataTableState extends State<FlexibleDataTable> {
 
   Widget _buildHeaderCell(
     BuildContext context,
-    FlexibleDataTableColumn column,
+    BetterDataTableColumn column,
     int originalIndex,
-    FlexibleDataTableTheme theme,
+    BetterDataTableTheme theme,
   ) {
     if (widget.headerBuilder != null) {
       return widget.headerBuilder!(context, column, originalIndex);
@@ -551,7 +551,7 @@ class _FlexibleDataTableState extends State<FlexibleDataTable> {
 
   List<TableRow> _buildDataRows(
     BuildContext context,
-    FlexibleDataTableTheme theme,
+    BetterDataTableTheme theme,
   ) {
     final rows = <TableRow>[];
     for (var i = 0; i < widget.rows.length; i++) {
@@ -570,11 +570,11 @@ class _FlexibleDataTableState extends State<FlexibleDataTable> {
 
   void _buildDataRowRecursive(
     BuildContext context,
-    FlexibleDataTableRow row,
+    BetterDataTableRow row,
     int rowIndex,
     String rowPath,
     int nestingLevel,
-    FlexibleDataTableTheme theme,
+    BetterDataTableTheme theme,
     List<TableRow> rows,
   ) {
     // Add the current row
@@ -604,11 +604,11 @@ class _FlexibleDataTableState extends State<FlexibleDataTable> {
 
   TableRow _buildDataRow(
     BuildContext context,
-    FlexibleDataTableRow row,
+    BetterDataTableRow row,
     int rowIndex,
     String rowPath,
     int nestingLevel,
-    FlexibleDataTableTheme theme,
+    BetterDataTableTheme theme,
   ) {
     final cells = <Widget>[];
     final isHovered = _hoveredRows[rowPath] ?? false;
@@ -720,7 +720,7 @@ class _FlexibleDataTableState extends State<FlexibleDataTable> {
     BuildContext context,
     int rowIndex,
     bool isSelected,
-    FlexibleDataTableTheme theme,
+    BetterDataTableTheme theme,
   ) {
     void onChanged(bool? v) {
       setState(() {
@@ -745,11 +745,11 @@ class _FlexibleDataTableState extends State<FlexibleDataTable> {
   Widget _buildDataCell(
     BuildContext context,
     Widget cell,
-    FlexibleDataTableColumn column,
-    FlexibleDataTableRow row,
+    BetterDataTableColumn column,
+    BetterDataTableRow row,
     int rowIndex,
     int originalColumnIndex,
-    FlexibleDataTableTheme theme, {
+    BetterDataTableTheme theme, {
     int nestingLevel = 0,
   }) {
     if (widget.cellBuilder != null) {
@@ -794,11 +794,11 @@ class _FlexibleDataTableState extends State<FlexibleDataTable> {
 
   Widget _buildExpandToggle(
     BuildContext context,
-    FlexibleDataTableRow row,
+    BetterDataTableRow row,
     String rowPath,
     bool hasChildren,
     bool hasExpandableContent,
-    FlexibleDataTableTheme theme,
+    BetterDataTableTheme theme,
   ) {
     // Check if custom expandable content exists
     final hasCustomContent = hasExpandableContent &&
@@ -841,10 +841,10 @@ class _FlexibleDataTableState extends State<FlexibleDataTable> {
 
   TableRow _buildExpandedRow(
     BuildContext context,
-    FlexibleDataTableRow row,
+    BetterDataTableRow row,
     int rowIndex,
     String rowPath,
-    FlexibleDataTableTheme theme,
+    BetterDataTableTheme theme,
   ) {
     final content = widget.expandableRowBuilder!(context, row, rowIndex);
     if (content == null) {
@@ -872,7 +872,7 @@ class _FlexibleDataTableState extends State<FlexibleDataTable> {
 
   List<TableRow> _buildGroupedRows(
     BuildContext context,
-    FlexibleDataTableTheme theme,
+    BetterDataTableTheme theme,
   ) {
     final rows = <TableRow>[];
     final groups = widget.groups!;
@@ -907,10 +907,10 @@ class _FlexibleDataTableState extends State<FlexibleDataTable> {
 
   TableRow _buildGroupHeader(
     BuildContext context,
-    FlexibleDataTableGroup group,
+    BetterDataTableGroup group,
     int groupIndex,
     bool isCollapsed,
-    FlexibleDataTableTheme theme,
+    BetterDataTableTheme theme,
   ) {
     Widget content;
 
@@ -972,7 +972,7 @@ class _FlexibleDataTableState extends State<FlexibleDataTable> {
 
   List<TableRow> _buildFooterRows(
     BuildContext context,
-    FlexibleDataTableTheme theme,
+    BetterDataTableTheme theme,
   ) {
     return widget.footerRows!.map((row) {
       final cells = <Widget>[];
@@ -1033,7 +1033,7 @@ class _FlexibleDataTableState extends State<FlexibleDataTable> {
     );
   }
 
-  Widget _buildDefaultEmpty(FlexibleDataTableTheme theme) {
+  Widget _buildDefaultEmpty(BetterDataTableTheme theme) {
     return Padding(
       padding: const EdgeInsets.all(32),
       child: Center(

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-/// Visual configuration for a [FlexibleDataTable].
+/// Visual configuration for a [BetterDataTable].
 ///
-/// Pass a [FlexibleDataTableTheme] to [FlexibleDataTable.theme] to override defaults. Use the
-/// factory constructors [FlexibleDataTableTheme.defaultTheme], [FlexibleDataTableTheme.minimal],
-/// or [FlexibleDataTableTheme.striped] as starting points, then call [copyWith] to
+/// Pass a [BetterDataTableTheme] to [BetterDataTable.theme] to override defaults. Use the
+/// factory constructors [BetterDataTableTheme.defaultTheme], [BetterDataTableTheme.minimal],
+/// or [BetterDataTableTheme.striped] as starting points, then call [copyWith] to
 /// adjust individual properties.
-class FlexibleDataTableTheme {
-  const FlexibleDataTableTheme({
+class BetterDataTableTheme {
+  const BetterDataTableTheme({
     this.headerDecoration,
     this.rowDecoration,
     this.alternateRowDecoration,
@@ -41,7 +41,7 @@ class FlexibleDataTableTheme {
   final BoxDecoration? rowDecoration;
 
   /// Decoration applied to even-indexed (1, 3, 5 …) data rows when using
-  /// [FlexibleDataTableTheme.striped]. Also used by the striped factory.
+  /// [BetterDataTableTheme.striped]. Also used by the striped factory.
   final BoxDecoration? alternateRowDecoration;
 
   /// Decoration applied when the pointer hovers over a data row.
@@ -113,11 +113,11 @@ class FlexibleDataTableTheme {
   // ---------------------------------------------------------------------------
 
   /// Material Design 3 theme derived from the ambient [ThemeData].
-  factory FlexibleDataTableTheme.defaultTheme(BuildContext context) {
+  factory BetterDataTableTheme.defaultTheme(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    return FlexibleDataTableTheme(
+    return BetterDataTableTheme(
       headerDecoration: BoxDecoration(
         color: colorScheme.surfaceContainerHighest,
         border: Border(bottom: BorderSide(color: colorScheme.outline)),
@@ -168,15 +168,15 @@ class FlexibleDataTableTheme {
   }
 
   /// Minimal theme: no decorations, hover disabled.
-  factory FlexibleDataTableTheme.minimal() {
-    return const FlexibleDataTableTheme(enableHoverEffect: false);
+  factory BetterDataTableTheme.minimal() {
+    return const BetterDataTableTheme(enableHoverEffect: false);
   }
 
   /// Striped theme: odd rows use [rowDecoration], even rows use
   /// [alternateRowDecoration] for visual separation.
-  factory FlexibleDataTableTheme.striped(BuildContext context) {
+  factory BetterDataTableTheme.striped(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final base = FlexibleDataTableTheme.defaultTheme(context);
+    final base = BetterDataTableTheme.defaultTheme(context);
 
     return base.copyWith(
       rowDecoration: BoxDecoration(color: colorScheme.surface),
@@ -190,8 +190,8 @@ class FlexibleDataTableTheme {
   // copyWith
   // ---------------------------------------------------------------------------
 
-  /// Returns a new [FlexibleDataTableTheme] with the given fields replaced.
-  FlexibleDataTableTheme copyWith({
+  /// Returns a new [BetterDataTableTheme] with the given fields replaced.
+  BetterDataTableTheme copyWith({
     BoxDecoration? headerDecoration,
     BoxDecoration? rowDecoration,
     BoxDecoration? alternateRowDecoration,
@@ -217,7 +217,7 @@ class FlexibleDataTableTheme {
     Color? sortIconColor,
     bool? enableHoverEffect,
   }) {
-    return FlexibleDataTableTheme(
+    return BetterDataTableTheme(
       headerDecoration: headerDecoration ?? this.headerDecoration,
       rowDecoration: rowDecoration ?? this.rowDecoration,
       alternateRowDecoration:
