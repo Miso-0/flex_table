@@ -180,14 +180,21 @@ class FlexTable extends StatefulWidget {
 
   /// Returns the widget to display below the row when it is expanded, or
   /// `null` if the row is not expandable.
+  ///
+  /// **Note:** If rows have [FlexTableRow.children], they will automatically
+  /// be expandable regardless of this builder. This builder is for custom
+  /// expandable content that isn't hierarchical sub-rows.
   final Widget? Function(BuildContext context, FlexTableRow row, int rowIndex)?
   expandableRowBuilder;
 
-  /// Row indices that are currently expanded.
-  final Set<int> expandedRows;
+  /// Row paths that are currently expanded.
+  /// For hierarchical rows, use dot-separated paths like "0", "0.1", "0.1.2".
+  /// For simple rows without children, use the row index as a string like "0", "1", "2".
+  final Set<String> expandedRows;
 
-  /// Called with the row index when the expand/collapse button is tapped.
-  final ValueChanged<int>? onRowExpanded;
+  /// Called with the row path when the expand/collapse button is tapped.
+  /// For hierarchical rows, the path is dot-separated like "0.1.2".
+  final ValueChanged<String>? onRowExpanded;
 
   // ── Loading ─────────────────────────────────────────────────────────────────
 
@@ -262,9 +269,9 @@ class FlexTable extends StatefulWidget {
 
 class _FlexTableState extends State<FlexTable> {
   late Set<int> _selectedRows;
-  late Set<int> _expandedRows;
+  late Set<String> _expandedRows;
   late Set<int> _collapsedGroups;
-  final Map<int, bool> _hoveredRows = {};
+  final Map<String, bool> _hoveredRows = {};
 
   @override
   void initState() {
@@ -299,10 +306,25 @@ class _FlexTableState extends State<FlexTable> {
     return result;
   }
 
-  int get _totalColumnCount =>
-      _visibleColumns.length +
-      (widget.showCheckboxes ? 1 : 0) +
-      (widget.expandableRowBuilder != null ? 1 : 0);
+  int get _totalColumnCount {
+    final hasExpandColumn = widget.expandableRowBuilder != null ||
+        _anyRowHasChildren(widget.rows);
+    return _visibleColumns.length +
+        (widget.showCheckboxes ? 1 : 0) +
+        (hasExpandColumn ? 1 : 0);
+  }
+
+  bool _anyRowHasChildren(List<FlexTableRow> rows) {
+    for (final row in rows) {
+      if (row.children != null && row.children!.isNotEmpty) {
+        return true;
+      }
+      if (row.children != null && _anyRowHasChildren(row.children!)) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   BoxDecoration? _rowDecoration(
     FlexTableTheme theme,
@@ -400,7 +422,9 @@ class _FlexTableState extends State<FlexTable> {
       widths[vi + offset] = w;
     }
 
-    if (widget.expandableRowBuilder != null) {
+    final hasExpandColumn = widget.expandableRowBuilder != null ||
+        _anyRowHasChildren(widget.rows);
+    if (hasExpandColumn) {
       widths[visible.length + offset] = const FixedColumnWidth(48);
     }
 
@@ -420,7 +444,9 @@ class _FlexTableState extends State<FlexTable> {
       cells.add(_buildHeaderCell(context, column, originalIndex, theme));
     }
 
-    if (widget.expandableRowBuilder != null) {
+    final hasExpandColumn = widget.expandableRowBuilder != null ||
+        _anyRowHasChildren(widget.rows);
+    if (hasExpandColumn) {
       cells.add(const SizedBox(width: 48));
     }
 
@@ -519,22 +545,63 @@ class _FlexTableState extends State<FlexTable> {
   List<TableRow> _buildDataRows(BuildContext context, FlexTableTheme theme) {
     final rows = <TableRow>[];
     for (var i = 0; i < widget.rows.length; i++) {
-      rows.add(_buildDataRow(context, widget.rows[i], i, theme));
-      if (_expandedRows.contains(i) && widget.expandableRowBuilder != null) {
-        rows.add(_buildExpandedRow(context, widget.rows[i], i, theme));
-      }
+      _buildDataRowRecursive(
+        context,
+        widget.rows[i],
+        i,
+        '$i',
+        0,
+        theme,
+        rows,
+      );
     }
     return rows;
+  }
+
+  void _buildDataRowRecursive(
+    BuildContext context,
+    FlexTableRow row,
+    int rowIndex,
+    String rowPath,
+    int nestingLevel,
+    FlexTableTheme theme,
+    List<TableRow> rows,
+  ) {
+    // Add the current row
+    rows.add(_buildDataRow(context, row, rowIndex, rowPath, nestingLevel, theme));
+
+    // Check if we should show custom expanded content
+    final isExpanded = _expandedRows.contains(rowPath);
+    if (isExpanded && widget.expandableRowBuilder != null) {
+      rows.add(_buildExpandedRow(context, row, rowIndex, rowPath, theme));
+    }
+
+    // Recursively add child rows if expanded
+    if (isExpanded && row.children != null && row.children!.isNotEmpty) {
+      for (var i = 0; i < row.children!.length; i++) {
+        _buildDataRowRecursive(
+          context,
+          row.children![i],
+          i,
+          '$rowPath.$i',
+          nestingLevel + 1,
+          theme,
+          rows,
+        );
+      }
+    }
   }
 
   TableRow _buildDataRow(
     BuildContext context,
     FlexTableRow row,
     int rowIndex,
+    String rowPath,
+    int nestingLevel,
     FlexTableTheme theme,
   ) {
     final cells = <Widget>[];
-    final isHovered = _hoveredRows[rowIndex] ?? false;
+    final isHovered = _hoveredRows[rowPath] ?? false;
     final isSelected = _selectedRows.contains(rowIndex);
 
     // Checkbox
@@ -542,7 +609,7 @@ class _FlexTableState extends State<FlexTable> {
       cells.add(_buildRowCheckbox(context, rowIndex, isSelected, theme));
     }
 
-    // Data cells
+    // Data cells with indentation for first column
     final visible = _visibleColumns;
     for (var vi = 0; vi < visible.length; vi++) {
       final (originalIndex, column) = visible[vi];
@@ -550,6 +617,9 @@ class _FlexTableState extends State<FlexTable> {
         cells.add(const SizedBox.shrink());
         continue;
       }
+
+      // Add indentation to the first visible column based on nesting level
+      final isFirstColumn = vi == 0;
       cells.add(
         _buildDataCell(
           context,
@@ -559,13 +629,16 @@ class _FlexTableState extends State<FlexTable> {
           rowIndex,
           originalIndex,
           theme,
+          nestingLevel: isFirstColumn ? nestingLevel : 0,
         ),
       );
     }
 
-    // Expand toggle
-    if (widget.expandableRowBuilder != null) {
-      cells.add(_buildExpandToggle(context, row, rowIndex, theme));
+    // Expand toggle (show if row has children OR custom expandable content)
+    final hasChildren = row.children != null && row.children!.isNotEmpty;
+    final hasExpandableContent = widget.expandableRowBuilder != null;
+    if (hasChildren || hasExpandableContent) {
+      cells.add(_buildExpandToggle(context, row, rowPath, hasChildren, hasExpandableContent, theme));
     }
 
     final decoration = _rowDecoration(
@@ -614,8 +687,8 @@ class _FlexTableState extends State<FlexTable> {
 
       if (theme.enableHoverEffect) {
         child = MouseRegion(
-          onEnter: (_) => setState(() => _hoveredRows[rowIndex] = true),
-          onExit: (_) => setState(() => _hoveredRows[rowIndex] = false),
+          onEnter: (_) => setState(() => _hoveredRows[rowPath] = true),
+          onExit: (_) => setState(() => _hoveredRows[rowPath] = false),
           child: child,
         );
       }
@@ -663,8 +736,9 @@ class _FlexTableState extends State<FlexTable> {
     FlexTableRow row,
     int rowIndex,
     int originalColumnIndex,
-    FlexTableTheme theme,
-  ) {
+    FlexTableTheme theme, {
+    int nestingLevel = 0,
+  }) {
     if (widget.cellBuilder != null) {
       return widget.cellBuilder!(
         context,
@@ -673,6 +747,18 @@ class _FlexTableState extends State<FlexTable> {
         row,
         rowIndex,
         originalColumnIndex,
+      );
+    }
+
+    // Add indentation for nested rows
+    Widget cellContent = cell;
+    if (nestingLevel > 0) {
+      cellContent = Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(width: nestingLevel * 24.0), // 24px per level
+          Expanded(child: cell),
+        ],
       );
     }
 
@@ -687,7 +773,7 @@ class _FlexTableState extends State<FlexTable> {
         constraints: column.constraints,
         child: DefaultTextStyle.merge(
           style: theme.cellTextStyle ?? const TextStyle(),
-          child: cell,
+          child: cellContent,
         ),
       ),
     );
@@ -696,11 +782,17 @@ class _FlexTableState extends State<FlexTable> {
   Widget _buildExpandToggle(
     BuildContext context,
     FlexTableRow row,
-    int rowIndex,
+    String rowPath,
+    bool hasChildren,
+    bool hasExpandableContent,
     FlexTableTheme theme,
   ) {
-    final isExpandable =
-        widget.expandableRowBuilder!(context, row, rowIndex) != null;
+    // Check if custom expandable content exists
+    final hasCustomContent = hasExpandableContent &&
+        widget.expandableRowBuilder!(context, row, int.parse(rowPath.split('.').first)) != null;
+
+    // Only show toggle if there's something to expand
+    final isExpandable = hasChildren || hasCustomContent;
 
     return Container(
       padding: theme.cellPadding,
@@ -710,18 +802,18 @@ class _FlexTableState extends State<FlexTable> {
               borderRadius: BorderRadius.circular(20),
               onTap: () {
                 setState(() {
-                  if (_expandedRows.contains(rowIndex)) {
-                    _expandedRows.remove(rowIndex);
+                  if (_expandedRows.contains(rowPath)) {
+                    _expandedRows.remove(rowPath);
                   } else {
-                    _expandedRows.add(rowIndex);
+                    _expandedRows.add(rowPath);
                   }
                 });
-                widget.onRowExpanded?.call(rowIndex);
+                widget.onRowExpanded?.call(rowPath);
               },
               child: Padding(
                 padding: const EdgeInsets.all(4),
                 child: Icon(
-                  _expandedRows.contains(rowIndex)
+                  _expandedRows.contains(rowPath)
                       ? Icons.expand_less
                       : Icons.expand_more,
                   size: 20,
@@ -738,6 +830,7 @@ class _FlexTableState extends State<FlexTable> {
     BuildContext context,
     FlexTableRow row,
     int rowIndex,
+    String rowPath,
     FlexTableTheme theme,
   ) {
     final content = widget.expandableRowBuilder!(context, row, rowIndex);
@@ -780,12 +873,15 @@ class _FlexTableState extends State<FlexTable> {
           ri <= group.endIndex && ri < widget.rows.length;
           ri++
         ) {
-          final row = widget.rows[ri];
-          rows.add(_buildDataRow(context, row, ri, theme));
-          if (_expandedRows.contains(ri) &&
-              widget.expandableRowBuilder != null) {
-            rows.add(_buildExpandedRow(context, row, ri, theme));
-          }
+          _buildDataRowRecursive(
+            context,
+            widget.rows[ri],
+            ri,
+            '$ri',
+            0,
+            theme,
+            rows,
+          );
         }
       }
     }
@@ -896,7 +992,9 @@ class _FlexTableState extends State<FlexTable> {
         );
       }
 
-      if (widget.expandableRowBuilder != null) {
+      final hasExpandColumn = widget.expandableRowBuilder != null ||
+          _anyRowHasChildren(widget.rows);
+      if (hasExpandColumn) {
         cells.add(const SizedBox.shrink());
       }
 

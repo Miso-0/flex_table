@@ -43,7 +43,7 @@ class ExamplesPage extends StatelessWidget {
           _buildSectionTitle('3. Table with Selection'),
           const SelectableTableExample(),
           const SizedBox(height: 32),
-          _buildSectionTitle('4. Expandable Rows'),
+          _buildSectionTitle('4. Hierarchical/Nested Rows'),
           const ExpandableTableExample(),
           const SizedBox(height: 32),
           _buildSectionTitle('5. Table with Footer'),
@@ -278,7 +278,7 @@ class _SelectableTableExampleState extends State<SelectableTableExample> {
   }
 }
 
-// Example 4: Expandable Table
+// Example 4: Hierarchical/Nested Rows (like ClickUp tasks)
 class ExpandableTableExample extends StatefulWidget {
   const ExpandableTableExample({super.key});
 
@@ -287,57 +287,147 @@ class ExpandableTableExample extends StatefulWidget {
 }
 
 class _ExpandableTableExampleState extends State<ExpandableTableExample> {
-  Set<int> expandedRows = {};
+  Set<String> expandedRows = {'0', '0.0', '1'};
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: FlexTable(
-          expandedRows: expandedRows,
-          onRowExpanded: (index) {
-            setState(() {
-              if (expandedRows.contains(index)) {
-                expandedRows.remove(index);
-              } else {
-                expandedRows.add(index);
-              }
-            });
-          },
-          expandableRowBuilder: (context, row, index) {
-            return Container(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Additional details for row $index',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text('This content is shown when the row is expanded.'),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'You can put any widget here: images, forms, lists, etc.',
-                  ),
-                ],
-              ),
-            );
-          },
-          columns: [
-            FlexTableColumn(header: const Text('Product')),
-            FlexTableColumn(header: const Text('Price')),
-          ],
-          rows: [
-            FlexTableRow(
-              cells: [const Text('Product A'), const Text('\$29.99')],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Nested tasks with infinite levels (like ClickUp)',
+              style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
             ),
-            FlexTableRow(
-              cells: [const Text('Product B'), const Text('\$49.99')],
-            ),
-            FlexTableRow(
-              cells: [const Text('Product C'), const Text('\$19.99')],
+            const SizedBox(height: 8),
+            FlexTable(
+              expandedRows: expandedRows,
+              onRowExpanded: (path) {
+                setState(() {
+                  if (expandedRows.contains(path)) {
+                    expandedRows.remove(path);
+                  } else {
+                    expandedRows.add(path);
+                  }
+                });
+              },
+              columns: [
+                FlexTableColumn(
+                  header: const Text('Task'),
+                  width: const FlexColumnWidth(3),
+                ),
+                FlexTableColumn(
+                  header: const Text('Status'),
+                  width: const FlexColumnWidth(1),
+                ),
+                FlexTableColumn(
+                  header: const Text('Priority'),
+                  width: const FixedColumnWidth(100),
+                ),
+              ],
+              rows: [
+                // Project 1 with nested tasks
+                FlexTableRow(
+                  cells: [
+                    const Text('Project Alpha'),
+                    const Text('In Progress'),
+                    const Text('High'),
+                  ],
+                  children: [
+                    // Phase 1
+                    FlexTableRow(
+                      cells: [
+                        const Text('Phase 1: Planning'),
+                        const Text('Completed'),
+                        const Text('High'),
+                      ],
+                      children: [
+                        FlexTableRow(
+                          cells: [
+                            const Text('Research market needs'),
+                            const Text('Done'),
+                            const Text('Medium'),
+                          ],
+                        ),
+                        FlexTableRow(
+                          cells: [
+                            const Text('Define requirements'),
+                            const Text('Done'),
+                            const Text('High'),
+                          ],
+                          children: [
+                            FlexTableRow(
+                              cells: [
+                                const Text('Gather stakeholder input'),
+                                const Text('Done'),
+                                const Text('Medium'),
+                              ],
+                            ),
+                            FlexTableRow(
+                              cells: [
+                                const Text('Write specifications'),
+                                const Text('Done'),
+                                const Text('High'),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    // Phase 2
+                    FlexTableRow(
+                      cells: [
+                        const Text('Phase 2: Development'),
+                        const Text('In Progress'),
+                        const Text('High'),
+                      ],
+                      children: [
+                        FlexTableRow(
+                          cells: [
+                            const Text('Backend API'),
+                            const Text('In Progress'),
+                            const Text('High'),
+                          ],
+                        ),
+                        FlexTableRow(
+                          cells: [
+                            const Text('Frontend UI'),
+                            const Text('Not Started'),
+                            const Text('Medium'),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                // Project 2
+                FlexTableRow(
+                  cells: [
+                    const Text('Project Beta'),
+                    const Text('Planning'),
+                    const Text('Medium'),
+                  ],
+                  children: [
+                    FlexTableRow(
+                      cells: [
+                        const Text('Initial research'),
+                        const Text('In Progress'),
+                        const Text('Medium'),
+                      ],
+                    ),
+                  ],
+                ),
+                // Simple task without children
+                FlexTableRow(
+                  cells: [
+                    const Text('Standalone Task'),
+                    const Text('Completed'),
+                    const Text('Low'),
+                  ],
+                ),
+              ],
             ),
           ],
         ),

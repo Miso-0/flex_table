@@ -10,6 +10,7 @@ class FlexTableRow {
     this.cellAlignment,
     this.tooltip,
     this.key,
+    this.children,
   });
 
   /// Widgets rendered in each cell. The number of cells should match the number
@@ -37,6 +38,10 @@ class FlexTableRow {
   /// Optional key, useful for list animations.
   final Key? key;
 
+  /// Optional child rows for hierarchical/nested table structures.
+  /// When provided, an expand/collapse toggle is automatically shown.
+  final List<FlexTableRow>? children;
+
   /// Creates a copy of this row with the given fields replaced.
   FlexTableRow copyWith({
     List<Widget>? cells,
@@ -46,6 +51,7 @@ class FlexTableRow {
     Alignment? cellAlignment,
     String? tooltip,
     Key? key,
+    List<FlexTableRow>? children,
   }) {
     return FlexTableRow(
       cells: cells ?? this.cells,
@@ -55,6 +61,7 @@ class FlexTableRow {
       cellAlignment: cellAlignment ?? this.cellAlignment,
       tooltip: tooltip ?? this.tooltip,
       key: key ?? this.key,
+      children: children ?? this.children,
     );
   }
 }

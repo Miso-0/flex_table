@@ -611,7 +611,7 @@ void main() {
     });
 
     testWidgets('onRowExpanded fires with row index', (tester) async {
-      int? expandedIndex;
+      String? expandedIndex;
       await tester.pumpWidget(
         _wrap(
           FlexTable(
@@ -625,7 +625,7 @@ void main() {
 
       await tester.tap(find.byIcon(Icons.expand_more));
       await tester.pump();
-      expect(expandedIndex, 0);
+      expect(expandedIndex, '0');
     });
 
     testWidgets('null-returning builder hides expand icon', (tester) async {
