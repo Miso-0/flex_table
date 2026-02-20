@@ -634,10 +634,13 @@ class _FlexTableState extends State<FlexTable> {
       );
     }
 
-    // Expand toggle (show if row has children OR custom expandable content)
-    final hasChildren = row.children != null && row.children!.isNotEmpty;
-    final hasExpandableContent = widget.expandableRowBuilder != null;
-    if (hasChildren || hasExpandableContent) {
+    // Expand toggle column – always add when the column exists to keep all rows
+    // the same width. The toggle renders empty for non-expandable rows.
+    final hasExpandColumn = widget.expandableRowBuilder != null ||
+        _anyRowHasChildren(widget.rows);
+    if (hasExpandColumn) {
+      final hasChildren = row.children != null && row.children!.isNotEmpty;
+      final hasExpandableContent = widget.expandableRowBuilder != null;
       cells.add(_buildExpandToggle(context, row, rowPath, hasChildren, hasExpandableContent, theme));
     }
 
