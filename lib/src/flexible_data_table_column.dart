@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-/// Defines a column in a [FlexTable].
+/// Defines a column in a [FlexibleDataTable].
 ///
 /// Each column specifies its header widget, width strategy, sorting behavior,
 /// and per-column styling overrides.
-class FlexTableColumn {
-  const FlexTableColumn({
+class FlexibleDataTableColumn {
+  const FlexibleDataTableColumn({
     required this.header,
     this.width,
     this.minWidth,
@@ -37,7 +37,7 @@ class FlexTableColumn {
   /// Maximum width in logical pixels. Wraps [width] with [MinColumnWidth].
   final double? maxWidth;
 
-  /// Whether tapping this column header triggers sorting via [FlexTable.onSort].
+  /// Whether tapping this column header triggers sorting via [FlexibleDataTable.onSort].
   final bool sortable;
 
   /// Whether this column is rendered. Hidden columns are completely excluded
@@ -48,30 +48,30 @@ class FlexTableColumn {
   final String? tooltip;
 
   /// Tap callback for non-sortable column headers. Ignored when [sortable] is
-  /// `true` and [FlexTable.onSort] is provided.
+  /// `true` and [FlexibleDataTable.onSort] is provided.
   final VoidCallback? onTap;
 
   /// Padding applied to this column's header cell, overriding
-  /// [FlexTableTheme.headerCellPadding].
+  /// [FlexibleDataTableTheme.headerCellPadding].
   final EdgeInsets? headerPadding;
 
   /// Alignment of the header cell content, overriding
-  /// [FlexTableTheme.headerCellAlignment].
+  /// [FlexibleDataTableTheme.headerCellAlignment].
   final Alignment? headerAlignment;
 
   /// Padding applied to all data cells in this column, overriding
-  /// [FlexTableTheme.cellPadding].
+  /// [FlexibleDataTableTheme.cellPadding].
   final EdgeInsets? cellPadding;
 
   /// Alignment of all data cell content in this column, overriding
-  /// [FlexTableTheme.cellAlignment].
+  /// [FlexibleDataTableTheme.cellAlignment].
   final Alignment? cellAlignment;
 
   /// Additional box constraints applied to data cells in this column.
   final BoxConstraints? constraints;
 
   /// Creates a copy of this column with the given fields replaced.
-  FlexTableColumn copyWith({
+  FlexibleDataTableColumn copyWith({
     Widget? header,
     TableColumnWidth? width,
     double? minWidth,
@@ -86,7 +86,7 @@ class FlexTableColumn {
     Alignment? cellAlignment,
     BoxConstraints? constraints,
   }) {
-    return FlexTableColumn(
+    return FlexibleDataTableColumn(
       header: header ?? this.header,
       width: width ?? this.width,
       minWidth: minWidth ?? this.minWidth,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flex_table/flex_table.dart';
+import 'package:flexible_data_table/flexible_data_table.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'FlexTable Examples',
+      title: 'FlexibleDataTable Examples',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
@@ -28,7 +28,7 @@ class ExamplesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('FlexTable Examples'),
+        title: const Text('FlexibleDataTable Examples'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: ListView(
@@ -73,37 +73,37 @@ class BasicTableExample extends StatelessWidget {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: FlexTable(
+        child: FlexibleDataTable(
           columns: [
-            FlexTableColumn(
+            FlexibleDataTableColumn(
               header: const Text('Name'),
               width: const FlexColumnWidth(2),
             ),
-            FlexTableColumn(
+            FlexibleDataTableColumn(
               header: const Text('Age'),
               width: const FixedColumnWidth(80),
             ),
-            FlexTableColumn(
+            FlexibleDataTableColumn(
               header: const Text('City'),
               width: const FlexColumnWidth(1),
             ),
           ],
           rows: [
-            FlexTableRow(
+            FlexibleDataTableRow(
               cells: [
                 const Text('Alice Johnson'),
                 const Text('28'),
                 const Text('New York'),
               ],
             ),
-            FlexTableRow(
+            FlexibleDataTableRow(
               cells: [
                 const Text('Bob Smith'),
                 const Text('34'),
                 const Text('Los Angeles'),
               ],
             ),
-            FlexTableRow(
+            FlexibleDataTableRow(
               cells: [
                 const Text('Carol White'),
                 const Text('25'),
@@ -174,23 +174,23 @@ class _SortableTableExampleState extends State<SortableTableExample> {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: FlexTable(
-          theme: FlexTableTheme.defaultTheme(context),
+        child: FlexibleDataTable(
+          theme: FlexibleDataTableTheme.defaultTheme(context),
           sortColumnIndex: sortColumnIndex,
           sortAscending: sortAscending,
           onSort: _sort,
           columns: [
-            FlexTableColumn(
+            FlexibleDataTableColumn(
               header: const Text('Name'),
               sortable: true,
               width: const FlexColumnWidth(2),
             ),
-            FlexTableColumn(
+            FlexibleDataTableColumn(
               header: const Text('Age'),
               sortable: true,
               width: const FixedColumnWidth(80),
             ),
-            FlexTableColumn(
+            FlexibleDataTableColumn(
               header: const Text('City'),
               sortable: true,
               width: const FlexColumnWidth(1),
@@ -198,7 +198,7 @@ class _SortableTableExampleState extends State<SortableTableExample> {
           ],
           rows: people
               .map(
-                (person) => FlexTableRow(
+                (person) => FlexibleDataTableRow(
                   cells: [
                     Text(person.name),
                     Text('${person.age}'),
@@ -239,7 +239,7 @@ class _SelectableTableExampleState extends State<SelectableTableExample> {
                 style: Theme.of(context).textTheme.titleSmall,
               ),
             ),
-            FlexTable(
+            FlexibleDataTable(
               showCheckboxes: true,
               selectedRows: selectedRows,
               onRowSelected: (index) {
@@ -261,12 +261,12 @@ class _SelectableTableExampleState extends State<SelectableTableExample> {
                 });
               },
               columns: [
-                FlexTableColumn(header: const Text('Item')),
-                FlexTableColumn(header: const Text('Status')),
+                FlexibleDataTableColumn(header: const Text('Item')),
+                FlexibleDataTableColumn(header: const Text('Status')),
               ],
               rows: List.generate(
                 5,
-                (i) => FlexTableRow(
+                (i) => FlexibleDataTableRow(
                   cells: [Text('Item ${i + 1}'), Text('Active')],
                 ),
               ),
@@ -302,7 +302,7 @@ class _ExpandableTableExampleState extends State<ExpandableTableExample> {
               style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
             ),
             const SizedBox(height: 8),
-            FlexTable(
+            FlexibleDataTable(
               expandedRows: expandedRows,
               onRowExpanded: (path) {
                 setState(() {
@@ -314,22 +314,22 @@ class _ExpandableTableExampleState extends State<ExpandableTableExample> {
                 });
               },
               columns: [
-                FlexTableColumn(
+                FlexibleDataTableColumn(
                   header: const Text('Task'),
                   width: const FlexColumnWidth(3),
                 ),
-                FlexTableColumn(
+                FlexibleDataTableColumn(
                   header: const Text('Status'),
                   width: const FlexColumnWidth(1),
                 ),
-                FlexTableColumn(
+                FlexibleDataTableColumn(
                   header: const Text('Priority'),
                   width: const FixedColumnWidth(100),
                 ),
               ],
               rows: [
                 // Project 1 with nested tasks
-                FlexTableRow(
+                FlexibleDataTableRow(
                   cells: [
                     const Text('Project Alpha'),
                     const Text('In Progress'),
@@ -337,35 +337,35 @@ class _ExpandableTableExampleState extends State<ExpandableTableExample> {
                   ],
                   children: [
                     // Phase 1
-                    FlexTableRow(
+                    FlexibleDataTableRow(
                       cells: [
                         const Text('Phase 1: Planning'),
                         const Text('Completed'),
                         const Text('High'),
                       ],
                       children: [
-                        FlexTableRow(
+                        FlexibleDataTableRow(
                           cells: [
                             const Text('Research market needs'),
                             const Text('Done'),
                             const Text('Medium'),
                           ],
                         ),
-                        FlexTableRow(
+                        FlexibleDataTableRow(
                           cells: [
                             const Text('Define requirements'),
                             const Text('Done'),
                             const Text('High'),
                           ],
                           children: [
-                            FlexTableRow(
+                            FlexibleDataTableRow(
                               cells: [
                                 const Text('Gather stakeholder input'),
                                 const Text('Done'),
                                 const Text('Medium'),
                               ],
                             ),
-                            FlexTableRow(
+                            FlexibleDataTableRow(
                               cells: [
                                 const Text('Write specifications'),
                                 const Text('Done'),
@@ -377,21 +377,21 @@ class _ExpandableTableExampleState extends State<ExpandableTableExample> {
                       ],
                     ),
                     // Phase 2
-                    FlexTableRow(
+                    FlexibleDataTableRow(
                       cells: [
                         const Text('Phase 2: Development'),
                         const Text('In Progress'),
                         const Text('High'),
                       ],
                       children: [
-                        FlexTableRow(
+                        FlexibleDataTableRow(
                           cells: [
                             const Text('Backend API'),
                             const Text('In Progress'),
                             const Text('High'),
                           ],
                         ),
-                        FlexTableRow(
+                        FlexibleDataTableRow(
                           cells: [
                             const Text('Frontend UI'),
                             const Text('Not Started'),
@@ -403,14 +403,14 @@ class _ExpandableTableExampleState extends State<ExpandableTableExample> {
                   ],
                 ),
                 // Project 2
-                FlexTableRow(
+                FlexibleDataTableRow(
                   cells: [
                     const Text('Project Beta'),
                     const Text('Planning'),
                     const Text('Medium'),
                   ],
                   children: [
-                    FlexTableRow(
+                    FlexibleDataTableRow(
                       cells: [
                         const Text('Initial research'),
                         const Text('In Progress'),
@@ -420,7 +420,7 @@ class _ExpandableTableExampleState extends State<ExpandableTableExample> {
                   ],
                 ),
                 // Simple task without children
-                FlexTableRow(
+                FlexibleDataTableRow(
                   cells: [
                     const Text('Standalone Task'),
                     const Text('Completed'),
@@ -445,39 +445,39 @@ class FooterTableExample extends StatelessWidget {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: FlexTable(
+        child: FlexibleDataTable(
           columns: [
-            FlexTableColumn(
+            FlexibleDataTableColumn(
               header: const Text('Item'),
               width: const FlexColumnWidth(2),
             ),
-            FlexTableColumn(
+            FlexibleDataTableColumn(
               header: const Text('Quantity'),
               width: const FixedColumnWidth(100),
               cellAlignment: Alignment.centerRight,
             ),
-            FlexTableColumn(
+            FlexibleDataTableColumn(
               header: const Text('Price'),
               width: const FixedColumnWidth(100),
               cellAlignment: Alignment.centerRight,
             ),
           ],
           rows: [
-            FlexTableRow(
+            FlexibleDataTableRow(
               cells: [
                 const Text('Apple'),
                 const Text('5', textAlign: TextAlign.right),
                 const Text('\$10.00', textAlign: TextAlign.right),
               ],
             ),
-            FlexTableRow(
+            FlexibleDataTableRow(
               cells: [
                 const Text('Banana'),
                 const Text('3', textAlign: TextAlign.right),
                 const Text('\$6.00', textAlign: TextAlign.right),
               ],
             ),
-            FlexTableRow(
+            FlexibleDataTableRow(
               cells: [
                 const Text('Orange'),
                 const Text('2', textAlign: TextAlign.right),
@@ -486,7 +486,7 @@ class FooterTableExample extends StatelessWidget {
             ),
           ],
           footerRows: [
-            FlexTableRow(
+            FlexibleDataTableRow(
               cells: [
                 const Text('Total'),
                 const Text('10', textAlign: TextAlign.right),

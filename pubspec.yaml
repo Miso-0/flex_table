@@ -1,12 +1,12 @@
-name: flex_table
+name: flexible_data_table
 description: >-
   A highly customizable Flutter table widget with sorting, selection,
   expandable rows, collapsible groups, column visibility, striped rows,
   and a comprehensive theming system.
 version: 0.1.0
-homepage: https://github.com/Miso-0/flex_table
-repository: https://github.com/Miso-0/flex_table
-issue_tracker: https://github.com/Miso-0/flex_table/issues
+homepage: https://github.com/Miso-0/flexible_data_table
+repository: https://github.com/Miso-0/flexible_data_table
+issue_tracker: https://github.com/Miso-0/flexible_data_table/issues
 
 topics:
   - table

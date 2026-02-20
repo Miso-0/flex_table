@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-/// Defines a data row in a [FlexTable].
-class FlexTableRow {
-  const FlexTableRow({
+/// Defines a data row in a [FlexibleDataTable].
+class FlexibleDataTableRow {
+  const FlexibleDataTableRow({
     required this.cells,
     this.decoration,
     this.onTap,
@@ -21,14 +21,14 @@ class FlexTableRow {
   final BoxDecoration? decoration;
 
   /// Tap callback specific to this row. Called in addition to
-  /// [FlexTable.onRowTap].
+  /// [FlexibleDataTable.onRowTap].
   final VoidCallback? onTap;
 
   /// Padding applied to all cells in this row, overriding
-  /// [FlexTableTheme.cellPadding] and column-level padding.
+  /// [FlexibleDataTableTheme.cellPadding] and column-level padding.
   final EdgeInsets? cellPadding;
 
-  /// Alignment of all cells in this row, overriding [FlexTableTheme.cellAlignment]
+  /// Alignment of all cells in this row, overriding [FlexibleDataTableTheme.cellAlignment]
   /// and column-level alignment.
   final Alignment? cellAlignment;
 
@@ -40,10 +40,10 @@ class FlexTableRow {
 
   /// Optional child rows for hierarchical/nested table structures.
   /// When provided, an expand/collapse toggle is automatically shown.
-  final List<FlexTableRow>? children;
+  final List<FlexibleDataTableRow>? children;
 
   /// Creates a copy of this row with the given fields replaced.
-  FlexTableRow copyWith({
+  FlexibleDataTableRow copyWith({
     List<Widget>? cells,
     BoxDecoration? decoration,
     VoidCallback? onTap,
@@ -51,9 +51,9 @@ class FlexTableRow {
     Alignment? cellAlignment,
     String? tooltip,
     Key? key,
-    List<FlexTableRow>? children,
+    List<FlexibleDataTableRow>? children,
   }) {
-    return FlexTableRow(
+    return FlexibleDataTableRow(
       cells: cells ?? this.cells,
       decoration: decoration ?? this.decoration,
       onTap: onTap ?? this.onTap,

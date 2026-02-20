@@ -1,6 +1,6 @@
-import 'package:flex_table/flex_table.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flexible_data_table/flexible_data_table.dart';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -16,25 +16,25 @@ Widget _wrap(Widget child) {
   );
 }
 
-/// Returns a minimal two-column [FlexTable].
-FlexTable _basicTable({List<FlexTableRow> rows = const []}) {
-  return FlexTable(
+/// Returns a minimal two-column [FlexibleDataTable].
+FlexibleDataTable _basicTable({List<FlexibleDataTableRow> rows = const []}) {
+  return FlexibleDataTable(
     columns: const [
-      FlexTableColumn(header: Text('Name')),
-      FlexTableColumn(header: Text('Age')),
+      FlexibleDataTableColumn(header: Text('Name')),
+      FlexibleDataTableColumn(header: Text('Age')),
     ],
     rows: rows,
   );
 }
 
 // =============================================================================
-// FlexTableColumn
+// FlexibleDataTableColumn
 // =============================================================================
 
 void main() {
-  group('FlexTableColumn', () {
+  group('FlexibleDataTableColumn', () {
     test('defaults', () {
-      const col = FlexTableColumn(header: Text('X'));
+      const col = FlexibleDataTableColumn(header: Text('X'));
       expect(col.visible, isTrue);
       expect(col.sortable, isFalse);
       expect(col.tooltip, isNull);
@@ -44,7 +44,7 @@ void main() {
     });
 
     test('copyWith changes requested fields', () {
-      const original = FlexTableColumn(
+      const original = FlexibleDataTableColumn(
         header: Text('Original'),
         sortable: false,
         visible: true,
@@ -56,7 +56,7 @@ void main() {
     });
 
     test('copyWith preserves unchanged fields', () {
-      const original = FlexTableColumn(
+      const original = FlexibleDataTableColumn(
         header: Text('Keep'),
         minWidth: 60,
         maxWidth: 200,
@@ -71,24 +71,24 @@ void main() {
   });
 
   // ==========================================================================
-  // FlexTableRow
+  // FlexibleDataTableRow
   // ==========================================================================
 
-  group('FlexTableRow', () {
+  group('FlexibleDataTableRow', () {
     test('stores cells', () {
-      const row = FlexTableRow(cells: [Text('a'), Text('b')]);
+      const row = FlexibleDataTableRow(cells: [Text('a'), Text('b')]);
       expect(row.cells.length, 2);
     });
 
     test('copyWith changes cells', () {
-      const original = FlexTableRow(cells: [Text('old')]);
+      const original = FlexibleDataTableRow(cells: [Text('old')]);
       final copy = original.copyWith(cells: [const Text('new')]);
       expect((copy.cells.first as Text).data, 'new');
     });
 
     test('copyWith preserves decoration and tooltip', () {
       final decoration = BoxDecoration(color: Colors.red);
-      const original = FlexTableRow(cells: [], tooltip: 'tip');
+      const original = FlexibleDataTableRow(cells: [], tooltip: 'tip');
       final copy = original.copyWith(decoration: decoration);
       expect(copy.tooltip, 'tip');
       expect(copy.decoration, decoration);
@@ -96,12 +96,12 @@ void main() {
   });
 
   // ==========================================================================
-  // FlexTableGroup
+  // FlexibleDataTableGroup
   // ==========================================================================
 
-  group('FlexTableGroup', () {
+  group('FlexibleDataTableGroup', () {
     test('defaults', () {
-      const g = FlexTableGroup(
+      const g = FlexibleDataTableGroup(
         header: Text('G'),
         startIndex: 0,
         endIndex: 2,
@@ -110,7 +110,7 @@ void main() {
     });
 
     test('copyWith changes collapsible', () {
-      const g = FlexTableGroup(
+      const g = FlexibleDataTableGroup(
         header: Text('G'),
         startIndex: 0,
         endIndex: 1,
@@ -121,7 +121,7 @@ void main() {
     });
 
     test('copyWith preserves unchanged fields', () {
-      const g = FlexTableGroup(
+      const g = FlexibleDataTableGroup(
         header: Text('Section'),
         startIndex: 2,
         endIndex: 4,
@@ -134,19 +134,19 @@ void main() {
   });
 
   // ==========================================================================
-  // FlexTableTheme
+  // FlexibleDataTableTheme
   // ==========================================================================
 
-  group('FlexTableTheme', () {
+  group('FlexibleDataTableTheme', () {
     test('minimal disables hover and has no decorations', () {
-      final t = FlexTableTheme.minimal();
+      final t = FlexibleDataTableTheme.minimal();
       expect(t.enableHoverEffect, isFalse);
       expect(t.headerDecoration, isNull);
       expect(t.rowDecoration, isNull);
     });
 
     test('copyWith changes requested fields', () {
-      final t = FlexTableTheme.minimal().copyWith(
+      final t = FlexibleDataTableTheme.minimal().copyWith(
         enableHoverEffect: true,
         cellPadding: const EdgeInsets.all(4),
       );
@@ -155,7 +155,7 @@ void main() {
     });
 
     test('copyWith preserves unchanged fields', () {
-      const original = FlexTableTheme(
+      const original = FlexibleDataTableTheme(
         headerCellPadding: EdgeInsets.all(8),
         enableHoverEffect: false,
       );
@@ -165,12 +165,12 @@ void main() {
     });
 
     testWidgets('defaultTheme has row and header decorations', (tester) async {
-      late FlexTableTheme theme;
+      late FlexibleDataTableTheme theme;
       await tester.pumpWidget(
         _wrap(
           Builder(
             builder: (context) {
-              theme = FlexTableTheme.defaultTheme(context);
+              theme = FlexibleDataTableTheme.defaultTheme(context);
               return const SizedBox.shrink();
             },
           ),
@@ -182,12 +182,12 @@ void main() {
     });
 
     testWidgets('striped theme sets alternateRowDecoration', (tester) async {
-      late FlexTableTheme theme;
+      late FlexibleDataTableTheme theme;
       await tester.pumpWidget(
         _wrap(
           Builder(
             builder: (context) {
-              theme = FlexTableTheme.striped(context);
+              theme = FlexibleDataTableTheme.striped(context);
               return const SizedBox.shrink();
             },
           ),
@@ -198,21 +198,27 @@ void main() {
   });
 
   // ==========================================================================
-  // FlexTable – loading & empty states
+  // FlexibleDataTable – loading & empty states
   // ==========================================================================
 
-  group('FlexTable – loading & empty states', () {
-    testWidgets('shows CircularProgressIndicator when isLoading', (tester) async {
+  group('FlexibleDataTable – loading & empty states', () {
+    testWidgets('shows CircularProgressIndicator when isLoading', (
+      tester,
+    ) async {
       await tester.pumpWidget(
-        _wrap(FlexTable(
-          columns: const [FlexTableColumn(header: Text('A'))],
-          isLoading: true,
-        )),
+        _wrap(
+          FlexibleDataTable(
+            columns: const [FlexibleDataTableColumn(header: Text('A'))],
+            isLoading: true,
+          ),
+        ),
       );
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets('shows default empty message when rows is empty', (tester) async {
+    testWidgets('shows default empty message when rows is empty', (
+      tester,
+    ) async {
       await tester.pumpWidget(_wrap(_basicTable()));
       expect(find.text('No data available'), findsOneWidget);
     });
@@ -220,8 +226,8 @@ void main() {
     testWidgets('custom loading builder is used', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
-            columns: const [FlexTableColumn(header: Text('A'))],
+          FlexibleDataTable(
+            columns: const [FlexibleDataTableColumn(header: Text('A'))],
             isLoading: true,
             loadingBuilder: (_) => const Text('custom loading'),
           ),
@@ -233,8 +239,8 @@ void main() {
     testWidgets('custom empty builder is used', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
-            columns: const [FlexTableColumn(header: Text('A'))],
+          FlexibleDataTable(
+            columns: const [FlexibleDataTableColumn(header: Text('A'))],
             emptyBuilder: (_) => const Text('nothing here'),
           ),
         ),
@@ -244,16 +250,16 @@ void main() {
   });
 
   // ==========================================================================
-  // FlexTable – rendering
+  // FlexibleDataTable – rendering
   // ==========================================================================
 
-  group('FlexTable – rendering', () {
+  group('FlexibleDataTable – rendering', () {
     testWidgets('renders header text', (tester) async {
       await tester.pumpWidget(
         _wrap(
           _basicTable(
             rows: [
-              const FlexTableRow(cells: [Text('Alice'), Text('28')]),
+              const FlexibleDataTableRow(cells: [Text('Alice'), Text('28')]),
             ],
           ),
         ),
@@ -267,7 +273,7 @@ void main() {
         _wrap(
           _basicTable(
             rows: [
-              const FlexTableRow(cells: [Text('Bob'), Text('42')]),
+              const FlexibleDataTableRow(cells: [Text('Bob'), Text('42')]),
             ],
           ),
         ),
@@ -281,9 +287,9 @@ void main() {
         _wrap(
           _basicTable(
             rows: [
-              const FlexTableRow(cells: [Text('Alice'), Text('28')]),
-              const FlexTableRow(cells: [Text('Bob'), Text('34')]),
-              const FlexTableRow(cells: [Text('Carol'), Text('25')]),
+              const FlexibleDataTableRow(cells: [Text('Alice'), Text('28')]),
+              const FlexibleDataTableRow(cells: [Text('Bob'), Text('34')]),
+              const FlexibleDataTableRow(cells: [Text('Carol'), Text('25')]),
             ],
           ),
         ),
@@ -296,13 +302,13 @@ void main() {
     testWidgets('hidden column header is not rendered', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
+          FlexibleDataTable(
             columns: const [
-              FlexTableColumn(header: Text('Visible')),
-              FlexTableColumn(header: Text('Hidden'), visible: false),
+              FlexibleDataTableColumn(header: Text('Visible')),
+              FlexibleDataTableColumn(header: Text('Hidden'), visible: false),
             ],
             rows: const [
-              FlexTableRow(cells: [Text('v'), Text('h')]),
+              FlexibleDataTableRow(cells: [Text('v'), Text('h')]),
             ],
           ),
         ),
@@ -314,13 +320,13 @@ void main() {
     testWidgets('hidden column cell data is not rendered', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
+          FlexibleDataTable(
             columns: const [
-              FlexTableColumn(header: Text('A')),
-              FlexTableColumn(header: Text('B'), visible: false),
+              FlexibleDataTableColumn(header: Text('A')),
+              FlexibleDataTableColumn(header: Text('B'), visible: false),
             ],
             rows: const [
-              FlexTableRow(cells: [Text('shown'), Text('hidden-cell')]),
+              FlexibleDataTableRow(cells: [Text('shown'), Text('hidden-cell')]),
             ],
           ),
         ),
@@ -332,16 +338,16 @@ void main() {
     testWidgets('footer rows are rendered', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
+          FlexibleDataTable(
             columns: const [
-              FlexTableColumn(header: Text('Item')),
-              FlexTableColumn(header: Text('Total')),
+              FlexibleDataTableColumn(header: Text('Item')),
+              FlexibleDataTableColumn(header: Text('Total')),
             ],
             rows: const [
-              FlexTableRow(cells: [Text('Widget'), Text('5')]),
+              FlexibleDataTableRow(cells: [Text('Widget'), Text('5')]),
             ],
             footerRows: const [
-              FlexTableRow(cells: [Text('Sum'), Text('5')]),
+              FlexibleDataTableRow(cells: [Text('Sum'), Text('5')]),
             ],
           ),
         ),
@@ -352,14 +358,14 @@ void main() {
     testWidgets('group header text is rendered', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
-            columns: const [FlexTableColumn(header: Text('Name'))],
+          FlexibleDataTable(
+            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexTableRow(cells: [Text('Alice')]),
-              FlexTableRow(cells: [Text('Bob')]),
+              FlexibleDataTableRow(cells: [Text('Alice')]),
+              FlexibleDataTableRow(cells: [Text('Bob')]),
             ],
             groups: const [
-              FlexTableGroup(
+              FlexibleDataTableGroup(
                 header: Text('Group A'),
                 startIndex: 0,
                 endIndex: 1,
@@ -372,12 +378,16 @@ void main() {
       expect(find.text('Alice'), findsOneWidget);
     });
 
-    testWidgets('custom header builder replaces default header', (tester) async {
+    testWidgets('custom header builder replaces default header', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
-            columns: const [FlexTableColumn(header: Text('Original'))],
-            rows: const [FlexTableRow(cells: [Text('x')])],
+          FlexibleDataTable(
+            columns: const [FlexibleDataTableColumn(header: Text('Original'))],
+            rows: const [
+              FlexibleDataTableRow(cells: [Text('x')]),
+            ],
             headerBuilder: (_, _, _) => const Text('Custom Header'),
           ),
         ),
@@ -388,20 +398,20 @@ void main() {
   });
 
   // ==========================================================================
-  // FlexTable – sorting
+  // FlexibleDataTable – sorting
   // ==========================================================================
 
-  group('FlexTable – sorting', () {
+  group('FlexibleDataTable – sorting', () {
     testWidgets('arrow_upward shown for ascending sort', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
+          FlexibleDataTable(
             columns: const [
-              FlexTableColumn(header: Text('Name'), sortable: true),
-              FlexTableColumn(header: Text('Age'), sortable: true),
+              FlexibleDataTableColumn(header: Text('Name'), sortable: true),
+              FlexibleDataTableColumn(header: Text('Age'), sortable: true),
             ],
             rows: const [
-              FlexTableRow(cells: [Text('Alice'), Text('28')]),
+              FlexibleDataTableRow(cells: [Text('Alice'), Text('28')]),
             ],
             sortColumnIndex: 0,
             sortAscending: true,
@@ -415,12 +425,12 @@ void main() {
     testWidgets('arrow_downward shown for descending sort', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
+          FlexibleDataTable(
             columns: const [
-              FlexTableColumn(header: Text('Name'), sortable: true),
+              FlexibleDataTableColumn(header: Text('Name'), sortable: true),
             ],
             rows: const [
-              FlexTableRow(cells: [Text('Alice')]),
+              FlexibleDataTableRow(cells: [Text('Alice')]),
             ],
             sortColumnIndex: 0,
             sortAscending: false,
@@ -435,12 +445,12 @@ void main() {
       int? sortedIndex;
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
+          FlexibleDataTable(
             columns: const [
-              FlexTableColumn(header: Text('Name'), sortable: true),
+              FlexibleDataTableColumn(header: Text('Name'), sortable: true),
             ],
             rows: const [
-              FlexTableRow(cells: [Text('Alice')]),
+              FlexibleDataTableRow(cells: [Text('Alice')]),
             ],
             onSort: (i) => sortedIndex = i,
           ),
@@ -452,17 +462,18 @@ void main() {
       expect(sortedIndex, 0);
     });
 
-    testWidgets('sort icon not shown when column index does not match',
-        (tester) async {
+    testWidgets('sort icon not shown when column index does not match', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
+          FlexibleDataTable(
             columns: const [
-              FlexTableColumn(header: Text('Name'), sortable: true),
-              FlexTableColumn(header: Text('Age'), sortable: true),
+              FlexibleDataTableColumn(header: Text('Name'), sortable: true),
+              FlexibleDataTableColumn(header: Text('Age'), sortable: true),
             ],
             rows: const [
-              FlexTableRow(cells: [Text('Alice'), Text('28')]),
+              FlexibleDataTableRow(cells: [Text('Alice'), Text('28')]),
             ],
             sortColumnIndex: 1,
             onSort: (_) {},
@@ -475,18 +486,18 @@ void main() {
   });
 
   // ==========================================================================
-  // FlexTable – selection
+  // FlexibleDataTable – selection
   // ==========================================================================
 
-  group('FlexTable – selection', () {
+  group('FlexibleDataTable – selection', () {
     testWidgets('checkboxes shown when showCheckboxes is true', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
+          FlexibleDataTable(
             showCheckboxes: true,
-            columns: const [FlexTableColumn(header: Text('Name'))],
+            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexTableRow(cells: [Text('Alice')]),
+              FlexibleDataTableRow(cells: [Text('Alice')]),
             ],
           ),
         ),
@@ -498,11 +509,11 @@ void main() {
       int? selected;
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
+          FlexibleDataTable(
             showCheckboxes: true,
-            columns: const [FlexTableColumn(header: Text('Name'))],
+            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexTableRow(cells: [Text('Alice')]),
+              FlexibleDataTableRow(cells: [Text('Alice')]),
             ],
             onRowSelected: (i) => selected = i,
           ),
@@ -515,16 +526,18 @@ void main() {
       expect(selected, 0);
     });
 
-    testWidgets('onSelectAll fires when header checkbox tapped', (tester) async {
+    testWidgets('onSelectAll fires when header checkbox tapped', (
+      tester,
+    ) async {
       bool? selectAllValue;
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
+          FlexibleDataTable(
             showCheckboxes: true,
-            columns: const [FlexTableColumn(header: Text('Name'))],
+            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexTableRow(cells: [Text('Alice')]),
-              FlexTableRow(cells: [Text('Bob')]),
+              FlexibleDataTableRow(cells: [Text('Alice')]),
+              FlexibleDataTableRow(cells: [Text('Bob')]),
             ],
             onSelectAll: (v) => selectAllValue = v,
           ),
@@ -539,12 +552,12 @@ void main() {
     testWidgets('pre-selected row checkbox shows checked', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
+          FlexibleDataTable(
             showCheckboxes: true,
             selectedRows: const {0},
-            columns: const [FlexTableColumn(header: Text('Name'))],
+            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexTableRow(cells: [Text('Alice')]),
+              FlexibleDataTableRow(cells: [Text('Alice')]),
             ],
           ),
         ),
@@ -555,16 +568,18 @@ void main() {
   });
 
   // ==========================================================================
-  // FlexTable – expansion
+  // FlexibleDataTable – expansion
   // ==========================================================================
 
-  group('FlexTable – expansion', () {
+  group('FlexibleDataTable – expansion', () {
     testWidgets('expand_more icon shown for expandable rows', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
-            columns: const [FlexTableColumn(header: Text('Name'))],
-            rows: const [FlexTableRow(cells: [Text('Alice')])],
+          FlexibleDataTable(
+            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
+            rows: const [
+              FlexibleDataTableRow(cells: [Text('Alice')]),
+            ],
             expandableRowBuilder: (_, _, _) => const Text('Details'),
           ),
         ),
@@ -575,11 +590,12 @@ void main() {
     testWidgets('tapping expand icon shows expanded content', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
-            columns: const [FlexTableColumn(header: Text('Name'))],
-            rows: const [FlexTableRow(cells: [Text('Alice')])],
-            expandableRowBuilder: (_, _, _) =>
-                const Text('Expanded content'),
+          FlexibleDataTable(
+            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
+            rows: const [
+              FlexibleDataTableRow(cells: [Text('Alice')]),
+            ],
+            expandableRowBuilder: (_, _, _) => const Text('Expanded content'),
           ),
         ),
       );
@@ -593,9 +609,11 @@ void main() {
     testWidgets('tapping again collapses the expanded row', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
-            columns: const [FlexTableColumn(header: Text('Name'))],
-            rows: const [FlexTableRow(cells: [Text('Alice')])],
+          FlexibleDataTable(
+            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
+            rows: const [
+              FlexibleDataTableRow(cells: [Text('Alice')]),
+            ],
             expandableRowBuilder: (_, _, _) => const Text('Details'),
           ),
         ),
@@ -614,9 +632,11 @@ void main() {
       String? expandedIndex;
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
-            columns: const [FlexTableColumn(header: Text('Name'))],
-            rows: const [FlexTableRow(cells: [Text('Alice')])],
+          FlexibleDataTable(
+            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
+            rows: const [
+              FlexibleDataTableRow(cells: [Text('Alice')]),
+            ],
             expandableRowBuilder: (_, _, _) => const Text('details'),
             onRowExpanded: (i) => expandedIndex = i,
           ),
@@ -631,9 +651,11 @@ void main() {
     testWidgets('null-returning builder hides expand icon', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
-            columns: const [FlexTableColumn(header: Text('Name'))],
-            rows: const [FlexTableRow(cells: [Text('Alice')])],
+          FlexibleDataTable(
+            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
+            rows: const [
+              FlexibleDataTableRow(cells: [Text('Alice')]),
+            ],
             expandableRowBuilder: (_, _, _) => null,
           ),
         ),
@@ -643,20 +665,22 @@ void main() {
   });
 
   // ==========================================================================
-  // FlexTable – groups
+  // FlexibleDataTable – groups
   // ==========================================================================
 
-  group('FlexTable – groups', () {
-    testWidgets('collapsible group shows expand_more initially', (tester) async {
+  group('FlexibleDataTable – groups', () {
+    testWidgets('collapsible group shows expand_more initially', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
-            columns: const [FlexTableColumn(header: Text('Name'))],
+          FlexibleDataTable(
+            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexTableRow(cells: [Text('Alice')]),
+              FlexibleDataTableRow(cells: [Text('Alice')]),
             ],
             groups: const [
-              FlexTableGroup(
+              FlexibleDataTableGroup(
                 header: Text('Section'),
                 startIndex: 0,
                 endIndex: 0,
@@ -672,13 +696,13 @@ void main() {
     testWidgets('tapping collapsible group hides its rows', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
-            columns: const [FlexTableColumn(header: Text('Name'))],
+          FlexibleDataTable(
+            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexTableRow(cells: [Text('Alice')]),
+              FlexibleDataTableRow(cells: [Text('Alice')]),
             ],
             groups: const [
-              FlexTableGroup(
+              FlexibleDataTableGroup(
                 header: Text('Section'),
                 startIndex: 0,
                 endIndex: 0,
@@ -698,13 +722,13 @@ void main() {
     testWidgets('collapsed group can be expanded again', (tester) async {
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
-            columns: const [FlexTableColumn(header: Text('Name'))],
+          FlexibleDataTable(
+            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexTableRow(cells: [Text('Alice')]),
+              FlexibleDataTableRow(cells: [Text('Alice')]),
             ],
             groups: const [
-              FlexTableGroup(
+              FlexibleDataTableGroup(
                 header: Text('Section'),
                 startIndex: 0,
                 endIndex: 0,
@@ -728,13 +752,13 @@ void main() {
       int? toggledGroup;
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
-            columns: const [FlexTableColumn(header: Text('Name'))],
+          FlexibleDataTable(
+            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexTableRow(cells: [Text('Alice')]),
+              FlexibleDataTableRow(cells: [Text('Alice')]),
             ],
             groups: const [
-              FlexTableGroup(
+              FlexibleDataTableGroup(
                 header: Text('Section'),
                 startIndex: 0,
                 endIndex: 0,
@@ -753,18 +777,18 @@ void main() {
   });
 
   // ==========================================================================
-  // FlexTable – row callbacks
+  // FlexibleDataTable – row callbacks
   // ==========================================================================
 
-  group('FlexTable – row callbacks', () {
+  group('FlexibleDataTable – row callbacks', () {
     testWidgets('onRowTap fires with row index', (tester) async {
       int? tappedRow;
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
-            columns: const [FlexTableColumn(header: Text('Name'))],
+          FlexibleDataTable(
+            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
             rows: const [
-              FlexTableRow(cells: [Text('Alice')]),
+              FlexibleDataTableRow(cells: [Text('Alice')]),
             ],
             onRowTap: (i) => tappedRow = i,
           ),
@@ -776,19 +800,20 @@ void main() {
       expect(tappedRow, 0);
     });
 
-    testWidgets('onCellTap fires with correct row and column indices',
-        (tester) async {
+    testWidgets('onCellTap fires with correct row and column indices', (
+      tester,
+    ) async {
       int? tapRow;
       int? tapCol;
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
+          FlexibleDataTable(
             columns: const [
-              FlexTableColumn(header: Text('A')),
-              FlexTableColumn(header: Text('B')),
+              FlexibleDataTableColumn(header: Text('A')),
+              FlexibleDataTableColumn(header: Text('B')),
             ],
             rows: const [
-              FlexTableRow(cells: [Text('cell-a'), Text('cell-b')]),
+              FlexibleDataTableRow(cells: [Text('cell-a'), Text('cell-b')]),
             ],
             onCellTap: (r, c) {
               tapRow = r;
@@ -804,14 +829,16 @@ void main() {
       expect(tapCol, 1);
     });
 
-    testWidgets('FlexTableRow.onTap fires when row tapped', (tester) async {
+    testWidgets('FlexibleDataTableRow.onTap fires when row tapped', (
+      tester,
+    ) async {
       bool tapped = false;
       await tester.pumpWidget(
         _wrap(
-          FlexTable(
-            columns: const [FlexTableColumn(header: Text('Name'))],
+          FlexibleDataTable(
+            columns: const [FlexibleDataTableColumn(header: Text('Name'))],
             rows: [
-              FlexTableRow(
+              FlexibleDataTableRow(
                 cells: const [Text('Alice')],
                 onTap: () => tapped = true,
               ),
