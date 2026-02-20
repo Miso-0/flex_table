@@ -14,6 +14,14 @@ topics:
   - grid
   - ui
 
+platforms:
+  android:
+  ios:
+  linux:
+  macos:
+  web:
+  windows:
+
 environment:
   sdk: ^3.11.0
   flutter: ">=1.17.0"
