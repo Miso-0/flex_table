@@ -1,3 +1,15 @@
+## 0.2.1
+
+**Fixed:**
+- **Expand icon displays at true size** — the expand toggle cell no longer applies
+  `cellPadding` to its container, which was shrinking the available space in the
+  fixed-width (48 px) column and clipping larger custom icons
+- **Custom expand icons rendered without extra padding** — the inner `Padding(EdgeInsets.all(4))`
+  now wraps only the default fallback icons; widgets supplied via
+  `BetterDataTableTheme.rowExpandIcon` / `rowCollapseIcon` are rendered as-is
+
+---
+
 ## 0.2.0
 
 **New features:**
