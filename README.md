@@ -28,6 +28,10 @@ without locking you into a rigid design.
   between rows
 - **Column tooltips** — `BetterDataTableColumn(tooltip: 'hint')`
 - **Row tooltips** — `BetterDataTableRow(tooltip: 'hint')`
+- **Pointer cursor on clickable rows** — rows with tap handlers automatically
+  show a pointer cursor on desktop/web
+- **Fully customizable icons** — replace sort arrows, row expand/collapse toggles,
+  and group chevrons with any widget via `BetterDataTableTheme`
 - **Comprehensive theming** — override every decoration, padding, alignment, and
   text style via `BetterDataTableTheme` and its `copyWith`
 - **`copyWith` everywhere** — `BetterDataTableColumn`, `BetterDataTableRow`,
@@ -262,6 +266,52 @@ BetterDataTable(
     headerTextStyle: TextStyle(fontWeight: FontWeight.w900),
     rowDivider: BorderSide(color: Colors.grey.shade200),
   ),
+  columns: [ /* ... */ ],
+  rows: _rows,
+)
+```
+
+### Custom icons
+
+Every icon used by the table can be replaced with any widget via
+`BetterDataTableTheme`. Pass `null` (the default) to keep the built-in icon.
+
+| Theme field | Default icon | Where it appears |
+|---|---|---|
+| `sortAscendingIcon` | `Icons.arrow_upward` (16 px) | Sorted column header — ascending |
+| `sortDescendingIcon` | `Icons.arrow_downward` (16 px) | Sorted column header — descending |
+| `rowExpandIcon` | `Icons.expand_more` (20 px) | Collapsed expandable / hierarchical row |
+| `rowCollapseIcon` | `Icons.expand_less` (20 px) | Expanded expandable / hierarchical row |
+| `groupExpandIcon` | `Icons.chevron_right` (20 px) | Collapsed group header |
+| `groupCollapseIcon` | `Icons.expand_more` (20 px) | Expanded group header |
+
+```dart
+BetterDataTable(
+  theme: BetterDataTableTheme.defaultTheme(context).copyWith(
+    // Replace sort arrows with triangles
+    sortAscendingIcon:  Icon(Icons.arrow_drop_up,   size: 20, color: Colors.blue),
+    sortDescendingIcon: Icon(Icons.arrow_drop_down, size: 20, color: Colors.blue),
+    // Use custom SVG or any widget for row expand toggles
+    rowExpandIcon:   Icon(Icons.add_circle_outline,    size: 18),
+    rowCollapseIcon: Icon(Icons.remove_circle_outline, size: 18),
+    // Custom group chevrons
+    groupExpandIcon:   Icon(Icons.chevron_right, size: 20),
+    groupCollapseIcon: Icon(Icons.expand_more,   size: 20),
+  ),
+  columns: [ /* ... */ ],
+  rows: _rows,
+)
+```
+
+### Pointer cursor on clickable rows
+
+Rows that have any tap handler (`onRowTap`, `onRowDoubleTap`, `onRowLongPress`,
+`onRowSecondaryTap`, or `BetterDataTableRow.onTap`) automatically show the
+system pointer cursor on desktop and web — no extra configuration needed.
+
+```dart
+BetterDataTable(
+  onRowTap: (index) => print('tapped row $index'),
   columns: [ /* ... */ ],
   rows: _rows,
 )

@@ -508,16 +508,21 @@ class _BetterDataTableState extends State<BetterDataTable> {
     Widget content = column.header;
 
     if (column.sortable && widget.sortColumnIndex == originalIndex) {
+      final sortIcon = widget.sortAscending
+          ? (theme.sortAscendingIcon ??
+                Icon(Icons.arrow_upward, size: 16, color: theme.sortIconColor))
+          : (theme.sortDescendingIcon ??
+                Icon(
+                  Icons.arrow_downward,
+                  size: 16,
+                  color: theme.sortIconColor,
+                ));
       content = Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Flexible(child: content),
           const SizedBox(width: 4),
-          Icon(
-            widget.sortAscending ? Icons.arrow_upward : Icons.arrow_downward,
-            size: 16,
-            color: theme.sortIconColor,
-          ),
+          sortIcon,
         ],
       );
     }
@@ -700,10 +705,13 @@ class _BetterDataTableState extends State<BetterDataTable> {
 
       if (theme.enableHoverEffect) {
         child = MouseRegion(
+          cursor: hasTap ? SystemMouseCursors.click : MouseCursor.defer,
           onEnter: (_) => setState(() => _hoveredRows[rowPath] = true),
           onExit: (_) => setState(() => _hoveredRows[rowPath] = false),
           child: child,
         );
+      } else if (hasTap) {
+        child = MouseRegion(cursor: SystemMouseCursors.click, child: child);
       }
 
       if (row.tooltip != null) {
@@ -807,33 +815,32 @@ class _BetterDataTableState extends State<BetterDataTable> {
     // Only show toggle if there's something to expand
     final isExpandable = hasChildren || hasCustomContent;
 
+    if (!isExpandable) return const SizedBox.shrink();
+
     return Container(
       padding: theme.cellPadding,
       alignment: Alignment.center,
-      child: isExpandable
-          ? InkWell(
-              borderRadius: BorderRadius.circular(20),
-              onTap: () {
-                setState(() {
-                  if (_expandedRows.contains(rowPath)) {
-                    _expandedRows.remove(rowPath);
-                  } else {
-                    _expandedRows.add(rowPath);
-                  }
-                });
-                widget.onRowExpanded?.call(rowPath);
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(4),
-                child: Icon(
-                  _expandedRows.contains(rowPath)
-                      ? Icons.expand_less
-                      : Icons.expand_more,
-                  size: 20,
-                ),
-              ),
-            )
-          : null,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: () {
+          setState(() {
+            if (_expandedRows.contains(rowPath)) {
+              _expandedRows.remove(rowPath);
+            } else {
+              _expandedRows.add(rowPath);
+            }
+          });
+          widget.onRowExpanded?.call(rowPath);
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: _expandedRows.contains(rowPath)
+              ? (theme.rowCollapseIcon ??
+                    const Icon(Icons.expand_less, size: 20))
+              : (theme.rowExpandIcon ??
+                    const Icon(Icons.expand_more, size: 20)),
+        ),
+      ),
     );
   }
 
@@ -920,13 +927,15 @@ class _BetterDataTableState extends State<BetterDataTable> {
       Widget headerContent = group.header;
 
       if (group.collapsible) {
+        final groupIcon = isCollapsed
+            ? (theme.groupExpandIcon ??
+                  const Icon(Icons.chevron_right, size: 20))
+            : (theme.groupCollapseIcon ??
+                  const Icon(Icons.expand_more, size: 20));
         headerContent = Row(
           children: [
             Expanded(child: headerContent),
-            Icon(
-              isCollapsed ? Icons.chevron_right : Icons.expand_more,
-              size: 20,
-            ),
+            groupIcon,
           ],
         );
       }

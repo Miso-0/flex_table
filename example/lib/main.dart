@@ -48,6 +48,9 @@ class ExamplesPage extends StatelessWidget {
           const SizedBox(height: 32),
           _buildSectionTitle('5. Table with Footer'),
           const FooterTableExample(),
+          const SizedBox(height: 32),
+          _buildSectionTitle('6. Custom Icons'),
+          const CustomIconsExample(),
         ],
       ),
     );
@@ -491,6 +494,117 @@ class FooterTableExample extends StatelessWidget {
                 const Text('Total'),
                 const Text('10', textAlign: TextAlign.right),
                 const Text('\$24.00', textAlign: TextAlign.right),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Example 6: Custom Icons
+class CustomIconsExample extends StatefulWidget {
+  const CustomIconsExample({super.key});
+
+  @override
+  State<CustomIconsExample> createState() => _CustomIconsExampleState();
+}
+
+class _CustomIconsExampleState extends State<CustomIconsExample> {
+  int? sortColumnIndex;
+  bool sortAscending = true;
+  Set<String> expandedRows = {};
+
+  void _sort(int index) {
+    setState(() {
+      if (sortColumnIndex == index) {
+        sortAscending = !sortAscending;
+      } else {
+        sortColumnIndex = index;
+        sortAscending = true;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Sort arrows replaced with triangles, expand toggles replaced with +/− circles.',
+              style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
+            ),
+            const SizedBox(height: 8),
+            BetterDataTable(
+              theme: BetterDataTableTheme.defaultTheme(context).copyWith(
+                sortAscendingIcon: const Icon(
+                  Icons.arrow_drop_up,
+                  size: 20,
+                  color: Colors.deepPurple,
+                ),
+                sortDescendingIcon: const Icon(
+                  Icons.arrow_drop_down,
+                  size: 20,
+                  color: Colors.deepPurple,
+                ),
+                rowExpandIcon: const Icon(
+                  Icons.add_circle_outline,
+                  size: 18,
+                ),
+                rowCollapseIcon: const Icon(
+                  Icons.remove_circle_outline,
+                  size: 18,
+                ),
+              ),
+              sortColumnIndex: sortColumnIndex,
+              sortAscending: sortAscending,
+              onSort: _sort,
+              expandedRows: expandedRows,
+              onRowExpanded: (path) {
+                setState(() {
+                  expandedRows.contains(path)
+                      ? expandedRows.remove(path)
+                      : expandedRows.add(path);
+                });
+              },
+              onRowTap: (index) {},
+              columns: [
+                BetterDataTableColumn(
+                  header: const Text('Task'),
+                  sortable: true,
+                  width: const FlexColumnWidth(3),
+                ),
+                BetterDataTableColumn(
+                  header: const Text('Status'),
+                  sortable: true,
+                  width: const FlexColumnWidth(1),
+                ),
+              ],
+              rows: [
+                BetterDataTableRow(
+                  cells: const [Text('Project Alpha'), Text('Active')],
+                  children: [
+                    BetterDataTableRow(
+                      cells: const [Text('Phase 1'), Text('Done')],
+                    ),
+                    BetterDataTableRow(
+                      cells: const [Text('Phase 2'), Text('In Progress')],
+                    ),
+                  ],
+                ),
+                BetterDataTableRow(
+                  cells: const [Text('Project Beta'), Text('Planning')],
+                  children: [
+                    BetterDataTableRow(
+                      cells: const [Text('Research'), Text('Pending')],
+                    ),
+                  ],
+                ),
               ],
             ),
           ],

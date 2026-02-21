@@ -31,6 +31,12 @@ class BetterDataTableTheme {
     this.groupHeaderTextStyle,
     this.emptyTextStyle,
     this.sortIconColor,
+    this.sortAscendingIcon,
+    this.sortDescendingIcon,
+    this.rowExpandIcon,
+    this.rowCollapseIcon,
+    this.groupExpandIcon,
+    this.groupCollapseIcon,
     this.enableHoverEffect = true,
   });
 
@@ -103,6 +109,30 @@ class BetterDataTableTheme {
 
   /// Color of the sort direction arrow icon.
   final Color? sortIconColor;
+
+  /// Icon shown in the header when a column is sorted ascending.
+  /// Defaults to [Icons.arrow_upward] sized 16, colored with [sortIconColor].
+  final Widget? sortAscendingIcon;
+
+  /// Icon shown in the header when a column is sorted descending.
+  /// Defaults to [Icons.arrow_downward] sized 16, colored with [sortIconColor].
+  final Widget? sortDescendingIcon;
+
+  /// Icon shown on a collapsed row to indicate it can be expanded.
+  /// Defaults to [Icons.expand_more] sized 20.
+  final Widget? rowExpandIcon;
+
+  /// Icon shown on an expanded row to indicate it can be collapsed.
+  /// Defaults to [Icons.expand_less] sized 20.
+  final Widget? rowCollapseIcon;
+
+  /// Icon shown on a collapsed group header to indicate it can be expanded.
+  /// Defaults to [Icons.chevron_right] sized 20.
+  final Widget? groupExpandIcon;
+
+  /// Icon shown on an expanded group header to indicate it can be collapsed.
+  /// Defaults to [Icons.expand_more] sized 20.
+  final Widget? groupCollapseIcon;
 
   /// Whether hovering a row triggers a visual decoration change.
   /// Disable for tables on touch-only devices. Defaults to `true`.
@@ -215,6 +245,12 @@ class BetterDataTableTheme {
     TextStyle? groupHeaderTextStyle,
     TextStyle? emptyTextStyle,
     Color? sortIconColor,
+    Widget? sortAscendingIcon,
+    Widget? sortDescendingIcon,
+    Widget? rowExpandIcon,
+    Widget? rowCollapseIcon,
+    Widget? groupExpandIcon,
+    Widget? groupCollapseIcon,
     bool? enableHoverEffect,
   }) {
     return BetterDataTableTheme(
@@ -245,6 +281,12 @@ class BetterDataTableTheme {
       groupHeaderTextStyle: groupHeaderTextStyle ?? this.groupHeaderTextStyle,
       emptyTextStyle: emptyTextStyle ?? this.emptyTextStyle,
       sortIconColor: sortIconColor ?? this.sortIconColor,
+      sortAscendingIcon: sortAscendingIcon ?? this.sortAscendingIcon,
+      sortDescendingIcon: sortDescendingIcon ?? this.sortDescendingIcon,
+      rowExpandIcon: rowExpandIcon ?? this.rowExpandIcon,
+      rowCollapseIcon: rowCollapseIcon ?? this.rowCollapseIcon,
+      groupExpandIcon: groupExpandIcon ?? this.groupExpandIcon,
+      groupCollapseIcon: groupCollapseIcon ?? this.groupCollapseIcon,
       enableHoverEffect: enableHoverEffect ?? this.enableHoverEffect,
     );
   }
